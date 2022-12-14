@@ -20,7 +20,7 @@ The RBFsim results have been verified using MODFLOW results. You can find the MO
 
 The code currently can be used both as offline (preferred) and online mode (in development). Following steps need to be followed for running the code in **offline** mode. The interface of the code is based on Python [**streamlit**](https://streamlit.io/) library. The interface of RBFsim (online/0ffline)is:
 
-<img src="https://github.com/HTWDMAR/RBFsim/blob/main/Manual/RBFsim%20Interface.png" width="500" height="300">
+<img src="https://github.com/HTWDMAR/RBFsim/blob/main/Manual/RBFsim%20Interface.png" width="600" height="400">
 
 
 ## Steps for using code 
