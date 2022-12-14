@@ -41,8 +41,11 @@ The online version the app is still not completely functional. However, it can b
 ## Output from RBFsim
 RBFsim provides visuals as wells as numerical results. The numerical results can be downloaded as **CSV** file. The graphics can be downloaded as **PNG** file. Check the user [manual](https://github.com/HTWDMAR/RBFsim/blob/main/Manual/RBFsim%20User%20Manual_03.09.2022.pdf) for more complete details.
 
-_**Few screenshots from RBFsim**
+**Few screenshots from RBFsim**
 
+<img src="https://github.com/HTWDMAR/RBFsim/blob/main/Manual/RBFsim%20Interface.png" width="600" height="400">
+
+[Screenshots of RBFsim output](https://github.com/HTWDMAR/RBFsim/blob/main/Manual/screenshot.png)
 
 
 The codes in this site are **CC BY 4.0** licensed. The license wording can be found [here](https://creativecommons.org/licenses/by/4.0/).
