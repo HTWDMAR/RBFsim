@@ -2,6 +2,10 @@
 
 RBFsim is an implementation of Analytic Element Method (AEM) for analyzing a very basic River Bank Filtration (RBF) scenario.
 
+why
+
+<img src="https://github.com/HTWDMAR/RBFsim/blob/main/Manual/RBFsim.png" width="500" height="300">
+
 
 
 The codes in this site are CC BY 4.0 licensed. The license wording can be found [here](https://creativecommons.org/licenses/by/4.0/).
