@@ -4,7 +4,7 @@ RBFsim is an implementation of Analytic Element Method (AEM) for analyzing a ver
 
 why
 
-<img src="https://github.com/HTWDMAR/RBFsim/blob/main/Manual/RBFsim.png" width="500" height="300">
+
 
 
 
