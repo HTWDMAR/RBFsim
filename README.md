@@ -14,7 +14,7 @@ The current code can simulate:
 5. Include impact of riverbed clogging
 6. Visualization (isolines streamlines etc) for the above scenario.
 
-The RBFsim results have been verified using **MODFLOW** results. You can find the MODFLOW results (in **JUPYTER** notebook fromat) from [here](https://github.com/HTWDMAR/RBFsim/tree/main/Model%20verification)
+The RBFsim results have been verified using **MODFLOW** results. The MODFLOW results (in **JUPYTER** notebook fromat) can be obtained from [here](https://github.com/HTWDMAR/RBFsim/tree/main/Model%20verification)
 
 ## How to use the code:
 
