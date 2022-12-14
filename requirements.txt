@@ -1,0 +1,11 @@
+streamlit
+matplotlib
+numpy
+pandas
+sympy
+sqlite3
+scipy
+os
+flopy
+time
+itertools

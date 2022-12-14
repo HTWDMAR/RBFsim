@@ -10,8 +10,8 @@ Following authors are credited for this version [![DOI](https://zenodo.org/badge
 3. **V. Cantarella** - Offline code and verification
 4. **A. Villa** - offline code and case studies
 5. **M Gomez** - offline code and case studies
-6. Tassilo Reuschling - First offline code development
-7. Prof. Dr. T. Grischek - Supervisory support on contents
+6. **Tassilo Reuschling** - First offline code development
+7. **Prof. Dr. T. Grischek** - Supervisory support on contents
 
 ## References
 
