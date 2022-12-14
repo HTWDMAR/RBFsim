@@ -43,7 +43,7 @@ RBFsim provides visuals as wells as numerical results. The numerical results can
 
 **Few screenshots from RBFsim**
 
-<img src="https://github.com/HTWDMAR/RBFsim/blob/main/Manual/screenshot.png" width="600" height="400">
+<img src="https://github.com/HTWDMAR/RBFsim/blob/main/Manual/screenshot.png" width="800" height="300">
 
 [Screenshots of RBFsim output](https://github.com/HTWDMAR/RBFsim/blob/main/Manual/screenshot.png)
 
