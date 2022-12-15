@@ -27,7 +27,7 @@ The code currently can be used both as offline (preferred) and online mode (in d
 
 1. Make sure that you have Python installed in your system and the Python libraries provided in the [requirements.txt](https://github.com/HTWDMAR/RBFsim/blob/main/requirements.txt)
 2. Download the code as a zip file and extract it to any folder in your system
-3. From the folder, run the command `_**streamlit app.py**_`
+3. From the folder, run the command _**`streamlit app.py`**_
    
     using [VScode](https://code.visualstudio.com/) or any such IDE or also command-prompt that can execute the Python command.
 4. The RBFsim interface (seen above) will open in your default browser
