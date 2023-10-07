@@ -56,11 +56,13 @@ Following authors are credited for this version [![DOI](https://zenodo.org/badge
 1. **Dr P. K. Yadav** - For conceptualization and basic code development
 2. **M. Tufail** - Main code development for online implementation
 3. **V. Cantarella** - Offline code and verification
-4. **A. Villa** - offline code and case studies
-5. **M Gomez** - offline code and case studies
-6. **Tassilo Reuschling** - First offline code development
-7. **Prof. Dr T. Grischek** - Supervisory support on contents
-8. **Prof. Dr A. Hartmann** - Supervisory support on contents
+4. **V. Bhateja** - Online code development
+5. **A. Köhler** - MODFLOW verification and Case studies
+6. **A. Villa** - offline code and case studies
+7. **M Gomez** - offline code and case studies
+8. **Tassilo Reuschling** - First offline code development
+9. **Prof. Dr T. Grischek** - Supervisory support on contents
+10. **Prof. Dr A. Hartmann** - Supervisory support on contents
 
 ## References
 
