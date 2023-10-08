@@ -21,10 +21,11 @@ class river_length(): #Class to calculate river capture length, location and cap
             d = np.abs(self.model.river_a*xw + self.model.river_b*yw + self.model.river_c) / np.sqrt(self.model.river_a**2 + self.model.river_b**2)
             Qx = -self.model.Qo_x
             p = self.model.p
-
+            #st.write(Q,Qx)
             ex_st_points = Q /(np.pi*d*Qx)
 
             if ex_st_points <= 1: #Checking existing stagnation points
+                #st.write(Q,Qx,d)
                 st.write("There is no staganation Point")
             else:
                 equation = sympy.Eq(-(d+p)**2 + (d+p)*Q/(np.pi*Qx)-y**2,0) #Equation assumes the well is at y=0, it is corrected later
@@ -117,8 +118,8 @@ class river_length(): #Class to calculate river capture length, location and cap
                 v_i = np.sqrt(vx**2+vy**2)
 
                 #2.Estimating second point
-                y_2 = np.float(y1 + delta_s*vy/v_i)
-                x_2 = np.float(x1 + delta_s*vx/v_i)
+                y_2 = np.float64(y1 + delta_s*vy/v_i)
+                x_2 = np.float64(x1 + delta_s*vx/v_i)
 
                 if np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw:
                     break
@@ -179,9 +180,18 @@ class river_length(): #Class to calculate river capture length, location and cap
 
         qs = np.array(qs)
         tt = np.array(tt)
+        qs[qs<0]=0
+        tt[tt<0]=0
+        ys[ys<0]=0
+        for i in range(len(traj_array)):
+            traj_array[i][traj_array[i] < 0] = 0
 
+       
+        
+        #st.write('trajectory array',traj_array)
         #Calculate the average travel time
         avgtt = np.sum(qs*tt)/np.sum(qs)
+
         #Calculate min travel time
         mintt = np.min(tt)
 

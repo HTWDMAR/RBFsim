@@ -39,7 +39,7 @@ class MultiApp:
         })
 
     def run(self):
-        st.sidebar.title("Navigation Sidebar:")
+        st.sidebar.title(":red[Pages]")
         #st.sidebar.markdown("---")
         app = st.sidebar.radio(
         #app = st.sidebar.selectbox(

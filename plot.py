@@ -42,14 +42,16 @@ class plotting: #Class to assist plotting of the results
 
         fig, ax = plt.subplots(1,2, figsize = figsize, sharey = sharey, gridspec_kw={'width_ratios': [1, 3.5]})
         contour = plt.contourf(self.mesh()[0], self.mesh()[1], h, levels, cmap = cm.YlGnBu, alpha=alpha)
-        ax[1].set_xlabel('x [m]', fontsize=15)
-        ax[1].set_ylabel('y [m]', fontsize=15)
-        ax[1].tick_params(axis='both', which='major', labelsize=12)
-        ax[1].tick_params(axis='both', which='minor', labelsize=12)
+        ax[1].set_xlabel('Length of Domain [m]', fontsize=30,labelpad=15)
+        ax[1].set_ylabel('Width of Domain [m]', fontsize=30,labelpad=15)
+        ax[1].tick_params(axis='both', which='major', labelsize=30)
+        ax[1].tick_params(axis='both', which='minor', labelsize=30)
         plt.rcParams['contour.negative_linestyle'] = 'solid'
         #plt.xlabel('x [m]', fontsize=15)
         #plt.ylabel('y [m]', fontsize=15)
-        fig.colorbar(contour, ax=ax[1], shrink=0.9)
+        cbar = fig.colorbar(contour, ax=ax[1], shrink=0.9)
+        cbar.set_label('Head', fontsize=30, labelpad=-137)  # Add this line
+        cbar.ax.tick_params(labelsize=30)
 
         if not (quiver) and not (streams) and (traj_array==None):
             ax[1].contour(self.mesh()[0], self.mesh()[1], psi, int(levels*2.5), colors=('#848482',), linewidths=(1,))
@@ -73,20 +75,31 @@ class plotting: #Class to assist plotting of the results
         if tt is not None: #Travel time plot
             ax[0].plot(tt, ys, '--o', color='#0592D0', markersize=3)
             ax[0].set_xlabel('Travel time - Days', fontsize=15)
-            ax[0].set_ylabel('y [m]', fontsize=15)
+            ax[0].set_ylabel('Domain Width [m]', fontsize=15)
             ax[0].grid(alpha=0.2)
 
         else:
             fig.delaxes(ax[0])
-
+        ax[1].set_ylim(0, None)   # Modify here to show entire system
+        ax[0].set_ylim(0, None)  ## Modify here to show entrie system
         return ax, fig
 
     def plot3d(self, model): #3D Plotting of the results
-        fig, ax = plt.subplots(figsize = (15, 20), subplot_kw={'projection': "3d"})
+        fig, ax = plt.subplots(figsize=(15, 20), subplot_kw={'projection': "3d"})
         surf = ax.plot_surface(self.mesh()[0], self.mesh()[1], self.fix_to_mesh(model)[0], cmap=cm.coolwarm, linewidth=0, antialiased=True)
-        plt.gca().zaxis.set_major_formatter(StrMethodFormatter('{x:, .4f}'))
-        ax.set_xlabel('x [m]')
-        ax.set_ylabel('y [m]')
-        ax.set_zlabel('Drawdown [m]')
-        fig.colorbar(surf, shrink=0.8, ax=[ax], location="left")
+        ax.zaxis.set_major_formatter(StrMethodFormatter('{x:,.4f}'))  # Corrected format specifier
+        ax.set_xlabel('Length of Domain [m]', fontsize=25, labelpad=25)  # Increase font size and labelpad
+        ax.set_ylabel('Width of Domain [m]', fontsize=25, labelpad=28)  # Increase font size and labelpad
+        ax.set_zlabel('Drawdown [m]', fontsize=25, labelpad=5)  # Increase font size and labelpad
+        colorbar = fig.colorbar(surf, shrink=0.5, ax=ax, location="right")
+        colorbar.ax.tick_params(labelsize=25)  # Set the font size for colorbar labels
+
+        ax.set_zticks([])  # Hide the z-axis ticks
+
+        ax.set_ylim(0, None)  # Modify here to show entire vicinity
+
+        ax.tick_params(axis='x', labelsize=30)
+        ax.tick_params(axis='y', labelsize=30)
+
         return ax, fig
+

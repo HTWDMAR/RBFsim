@@ -1,6 +1,15 @@
 import streamlit as st
 import numpy as np
-#import matplotlib.pyplot as plt
+import streamlit.components.v1 as components
+import base64
+
+#def displayPDF(file):
+    # Opening file from file path
+    #with open(file, "rb") as f:
+        #base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+
+    # Embedding PDF in HTML
+    
 
 
 def app():
@@ -28,12 +37,13 @@ def app():
 			0.94, 0.95, 0.96, 0.97, 0.98, 0.99])	
 
 	st.sidebar.markdown("---")
-	st.sidebar.title("Estimate Parameters:")
-	if st.sidebar.checkbox("Estimate Distance against \u03B1"):
+	st.title(":red[Estimate Parameters]")
+	e1,e2,e3 = st.tabs(["**Estimate Distance**", "**Estimate Baseflow**","**Estimate Well Q**"])
+	with e1:
 
-		t1, t2 = st.columns([1.75, 1.25])
+		t1, t2,t3 = st.columns([1.75,0.25, 1.25])
 		with t1:
-			st.title("Estimate Distance:")
+			st.title(":blue[Estimate Distance:]")
 			alpha_value = st.number_input("Enter Desired Contribution Ratio \u03B1:", 0.010)
 			beta_value = np.interp(alpha_value, x, y)
 			beta = beta_value
@@ -44,9 +54,10 @@ def app():
 			d_value_int = np.float16(d_value)
 			if d_button:
 				st.markdown(""" ### Distance to the Well = {} m """.format(d_value_int))					
-		
 		with t2:
-			st.title("Equation Used:")
+                        st.write('')
+		with t3:
+			st.title(":blue[Equation:]")
 			st.markdown("")
 			st.markdown("")
 			st.markdown("")
@@ -54,7 +65,7 @@ def app():
 				f(\beta) = -\arctan(\sqrt{\beta}) + \frac{\sqrt{\beta}}{\beta+1} + \frac{\Pi\alpha}{2}
 			''')
 			st.latex(r'''
-				\alpha = Distribution Ration
+				\alpha = \text{Distribution Ratio}
 			''')
 			st.latex(r'''
 				\beta = \frac{1}{\Pi d} \frac{Q}{Qxo}
@@ -66,12 +77,12 @@ def app():
 
 		st.markdown("---")
 
-	if st.sidebar.checkbox("Estimate Baseflow against \u03B1"):
+	with e2:
 				
 
-		t1, t2 = st.columns([1.75, 1.25])
+		t1,t2,t3 = st.columns([1.75,0.25, 1.25])
 		with t1:
-			st.title("Estimate Baseflow:")
+			st.title(":blue[Estimate Baseflow:]")
 			alpha_value = st.number_input("Enter Desired Contribution Ratio \u03B1:", 0.011)
 			beta_value = np.interp(alpha_value, x, y)
 			beta = beta_value
@@ -81,10 +92,10 @@ def app():
 			Qx_beta_1 = Q_beta/(np.pi*(beta+1)*dist_beta)
 			Qx_beta_1_int = np.float16(Qx_beta_1)
 			if Qx_button:
-				st.markdown(""" ### Base Flow in X-Direction = {} m\u00B2/day """.format(Qx_beta_1_int))
+                                st.markdown(""" ### Base Flow in X-Direction = {} m\u00B2/day """.format(Qx_beta_1_int))
 
-		with t2:
-			st.title("Equation Used:")
+		with t3:
+			st.title(":blue[Equation:]")
 			st.markdown("")
 			st.markdown("")
 			st.markdown("")
@@ -92,7 +103,7 @@ def app():
 				f(\beta) = -\arctan(\sqrt{\beta}) + \frac{\sqrt{\beta}}{\beta+1} + \frac{\Pi\alpha}{2}
 			''')
 			st.latex(r'''
-				\alpha = Distribution Ration
+				\alpha = \text{Distribution Ratio}
 			''')
 			st.latex(r'''
 				\beta = \frac{1}{\Pi d} \frac{Q}{Qxo}
@@ -103,12 +114,12 @@ def app():
 			st.markdown("")
 		st.markdown("---")
 
-	if st.sidebar.checkbox("Estimate Well Q against \u03B1"):
+	with e3:
 			
 
-		t1, t2 = st.columns([1.75, 1.25])
+		t1,t2,t3 = st.columns([1.75,0.25, 1.25])
 		with t1:
-			st.title("Estimate Well Q:")
+			st.title(":blue[Estimate Well Q:]")
 			alpha_value = st.number_input("Enter Desired Contribution Ratio \u03B1:", 0.012)
 			beta_value = np.interp(alpha_value, x, y)
 			beta = beta_value
@@ -119,10 +130,8 @@ def app():
 			Q_beta_1_int = np.float16(Q_beta_1)	
 			if Q_button:
 				st.markdown(""" ### Well Discharge = {} m\u00B3/day """.format(Q_beta_1_int))
-
-
-		with t2:
-			st.title("Equation Used:")
+		with t3:
+			st.title(":blue[Equation:]")
 			st.markdown("")
 			st.markdown("")
 			st.markdown("")
@@ -130,7 +139,7 @@ def app():
 				f(\beta) = -\arctan(\sqrt{\beta}) + \frac{\sqrt{\beta}}{\beta+1} + \frac{\Pi\alpha}{2}
 			''')
 			st.latex(r'''
-				\alpha = Distribution Ration
+				\alpha = \text{Distribution Ratio}
 			''')
 			st.latex(r'''
 				\beta = \frac{1}{\Pi d} \frac{Q}{Qxo}
@@ -142,5 +151,13 @@ def app():
 			
 		
 		st.markdown("---")
-	
-	st.sidebar.markdown("---")
+
+		#pdf_path = "C:/Users/Working/GWbookdownloads/GW/RBF_Sim/RBFsim-main/local.pdf"
+
+		#pdf_url = f"file://{pdf_path}"
+
+		#pdf_display = f'<iframe src="{pdf_path}" width="700" height="1000" type="application/pdf"></iframe>'
+		#st.markdown(pdf_display, unsafe_allow_html=True)
+
+
+	#st.sidebar.markdown("---")
