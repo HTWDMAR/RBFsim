@@ -35,7 +35,7 @@ The code currently can be used both as offline (preferred) and online mode (in d
 
 ### Running the online app
 
-The online version the app is still not completely functional. However, it can be used for some very basic works. The online app of RBFsim can be run from:
+The online app of RBFsim can be run from:
 [**https://rbf-sim.streamlit.app/**](https://rbf-sim.streamlit.app/)
 
 ## Output from RBFsim
