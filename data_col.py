@@ -216,7 +216,7 @@ def app():
                 pump_rate = st.number_input("Pumping / Recharge Rate in (m³/day):", -10000., 10000., 30., 1.,help='-ve Pumping, +ve Recharge')
             with col2:
                 x_coo = st.number_input("X-Coordinate of Well (m)", 1, 199,30)
-                y_coo = st.number_input("Y-Coordinate of Well (m)", 1, 199,2)
+                y_coo = st.number_input("Y-Coordinate of Well (m)", 1, 199,60)
 
             if st.button("Add Values for Well"):
                 st.session_state.we_ls.append([well_id, pump_rate, x_coo, y_coo])
