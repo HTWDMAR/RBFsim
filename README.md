@@ -51,7 +51,7 @@ The codes in this site are **CC BY 4.0** licensed. The license wording can be fo
 Basically, for using code from here- the original authors should be credited.
 
 
-Following authors are credited for this version [![DOI](https://zenodo.org/badge/576730534.svg)](https://zenodo.org/badge/latestdoi/576730534) of the code (names not in any order):
+Following authors are credited for this version [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10040816.svg)](https://doi.org/10.5281/zenodo.10040816) of the code (names not in any order):
 
 1. **Dr P. K. Yadav** - For conceptualization and basic code development
 2. **M. Tufail** - Main code development for online implementation
