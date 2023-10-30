@@ -147,7 +147,7 @@ def app():
 
                 # ----------------------------------------------------------------------------Travel Time---------------------------------------------------------------------------
                 if len(results) > 1:
-                    st.error(" ** Note: ** Enter Exactly One Well to get the solution for Bank Filtrate Ratio, Capture Length and Time of Travel.")
+                    st.error(" ** Note: ** Enter Exactly One Well to get the solution for Bank Filtrate Portion, Capture Length and Time of Travel.")
                 else:
                     st.sidebar.markdown("---")
                     st.sidebar.title(":red[Time of Travel:]")
@@ -161,8 +161,8 @@ def app():
                         avg_tt_rounded = int(avgtt)
                         min_tt_rounded = int(mintt)
 
-                        st.sidebar.metric(label=":blue[Average Travel Time:]", value="{} Days".format(avg_tt_rounded))
-                        st.sidebar.metric(label=":blue[Minimum Travel Time:]", value="{} Days".format(min_tt_rounded))
+                        st.sidebar.metric(label=":blue[Average Travel Time:]", value="{} days".format(avg_tt_rounded))
+                        st.sidebar.metric(label=":blue[Minimum Travel Time:]", value="{} days".format(min_tt_rounded))
 
                         st.markdown("---")
 
