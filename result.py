@@ -29,7 +29,7 @@ def app():
     st.markdown("---")
 
     if 'aq_ls' and 'we_ls' and 'cf_ls' not in st.session_state:
-        st.subheader(":blue[Please Input Data to make the application work]")
+        st.subheader(":blue[Please Input Data for the simulation]")
     #st.write("Using Previous Database Data")
     #st.write(st.session_state.aq_ls)
     if 'aq_ls' and 'we_ls' and 'cf_ls' in st.session_state :
@@ -37,7 +37,7 @@ def app():
         #st.write(len(st.session_state.aq_ls))
 
         if len(st.session_state.aq_ls)==0 and len(st.session_state.we_ls) == 0 :
-            st.subheader(":blue[Please Input required data, to run the application]")
+            st.subheader(":blue[Please Input required data for the simulation]")
         if len(st.session_state.aq_ls) and (st.session_state.we_ls) !=0 :
             results_aq = st.session_state.aq_ls
             results = st.session_state.we_ls
