@@ -28,13 +28,13 @@ def app():
     #st.divider()
     #st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
     
-    aq_dc,well_dc,clo_dc,updown = st.tabs(["**Aquifier**", "**Well**","**Clogging Factor**","**Upload/Downlaod Data**"])
+    aq_dc,well_dc,clo_dc,updown = st.tabs(["**Aquifer**", "**Well**","**Clogging Factor**","**Upload/Downlaod Data**"])
     st.write("")
     with aq_dc :
         col1, col2 = st.columns(2)
     #if input_options == "Aquifer":
         with col1 :
-            st.subheader(':blue[Aquifier]')
+            st.subheader(':blue[Aquifer]')
         with col2:
             #menu_aq = ["New Data", "Update Data", "Delete Data"]
             #choice_aq = st.selectbox("Please Select Action (Aquifer)", menu_aq)
