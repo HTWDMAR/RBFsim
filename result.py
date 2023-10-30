@@ -114,15 +114,15 @@ def app():
                         length=sum(riv_coords)
                         
                         #st.sidebar.markdown("---")
-                        st.sidebar.title(":red[Contribution Ratio:]")
-                        if st.sidebar.checkbox("Bank Filtrate Contribution"):
-                            st.subheader(":blue[Bank Filterate Contribution:]")
+                        st.sidebar.title(":red[Contribution Portion:]")
+                        if st.sidebar.checkbox("Bank Filtrate Portion"):
+                            st.subheader(":blue[Bank Filterate Portion:]")
                             plot = plotting(0, 100, -20, 150, 100, riv_coords)
                             b, fig = plot.plot2d(aem_model, sharey=False, traj_array=traj_array, levels=8, quiver=False, streams=True)
                             st.pyplot(fig)
                             bf_ratio = capture_fraction * 100
                             bf_ratio_rounded = int(bf_ratio)
-                            st.sidebar.metric(label=":blue[Bank Filtrate Ratio:]", value="{} %".format(bf_ratio_rounded))
+                            st.sidebar.metric(label=":blue[Bank Filtrate Portion:]", value="{} %".format(bf_ratio_rounded))
 
                             riv_length_rounded = int(length)
                             st.sidebar.metric(label=":blue[River Capture Length:]", value="{} m".format(riv_length_rounded))
