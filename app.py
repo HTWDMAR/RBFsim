@@ -17,7 +17,7 @@ app.add_app("Home", home.app)
 #app.add_app("Theory", theory.app)
 app.add_app("Data Collection", data_col.app)
 app.add_app("Results", result.app)
-app.add_app("Parameter Esitimation", help_page.app)
+app.add_app("Parameter Estimation", help_page.app)
 app.add_app("Help Page",new_help.app)
 
 

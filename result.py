@@ -84,13 +84,15 @@ def app():
                         st.subheader(":blue[Well in Flow Field:]")
                     plot1 = plotting(0, 100, -20, 150, 100)
                     b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))
+                    st.pyplot(fig1)                        
                     
-                    st.pyplot(fig1)
 
                 with c2:
                     st.write('')
                     st.write('')
                     display_3d_plot = st.checkbox(":blue[Display 3D Plot]")
+                    
+                    
 
                     # Check if the checkbox is checked
                     if display_3d_plot:

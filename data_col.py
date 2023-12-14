@@ -213,7 +213,9 @@ def app():
             col1, col2 = st.columns(2)
             with col1:
                 well_id = st.number_input("Well ID (n)", 1, 10, 1)
-                pump_rate = st.number_input("Pumping / Recharge Rate in (m³/day):", -10000., 10000., 30., 1.,help='-ve Pumping, +ve Recharge')
+                #----------limit pump_rate input upto 50 for 2D and 3D plot runtime error-----------------
+                pump_rate = st.number_input("Pumping / Recharge Rate in (m³/day):", -10000., 50., 30., 1.,help='-ve Pumping, +ve Recharge')
+                st.warning('Please keep the Pumping Rate < 50 to generate 3D plot.', icon="⚠️")
             with col2:
                 x_coo = st.number_input("X-Coordinate of Well (m)", 1, 199,30)
                 y_coo = st.number_input("Y-Coordinate of Well (m)", 1, 199,60)
@@ -250,7 +252,9 @@ def app():
                     col1, col2 = st.columns(2)
                     with col1:
                         new_well_id = st.number_input("Well ID (n)", well_id)
-                        new_pump_rate = st.number_input("Pumping / Recharge Rate in (m\u00B3/day):", -10000., 10000., float(pump_rate),help='-ve Pumping, +ve Recharge')
+                        #----------limit pump_rate input upto 50 for 2D and 3D plot runtime error-----------------
+                        new_pump_rate = st.number_input("Pumping / Recharge Rate in (m\u00B3/day):", -10000., 50., float(pump_rate),help='-ve Pumping, +ve Recharge')
+                        st.warning('Please keep the Pumping Rate < 50 to generate 3D plot.', icon="⚠️")
                     with col2:
                         new_x_coo = st.number_input("X-Coordinate (m)", 1., 199., float(x_coo))
                         new_y_coo = st.number_input("Y-Coordinate (m)", 1.,199., float(y_coo))
