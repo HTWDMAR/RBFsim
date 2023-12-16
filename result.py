@@ -86,7 +86,8 @@ def app():
 
                     plot1 = plotting(0, 100, -20, 150, 100)
                     b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))
-                    st.pyplot(fig1)                        
+                    st.pyplot(fig1) 
+                    st.stop()                       
                 except Exception as e:
                     print('error occurred:', e)
                     
@@ -106,7 +107,7 @@ def app():
 
                 st.divider()
                 c1,c2=st.columns(2)
-                
+
                 with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
                     if len(results) > 1:
                         st.sidebar.markdown("---")
