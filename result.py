@@ -82,9 +82,13 @@ def app():
                         st.subheader(":blue[Wells in Flow Field:]")
                     else:
                         st.subheader(":blue[Well in Flow Field:]")
-                    plot1 = plotting(0, 100, -20, 150, 100)
-                    b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))
-                    st.pyplot(fig1)                        
+                    try:
+
+                        plot1 = plotting(0, 100, -20, 150, 100)
+                        b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))
+                        st.pyplot(fig1)                        
+                    except Exception as e:
+                        print('error occurred:', e)
                     
 
                 with c2:
