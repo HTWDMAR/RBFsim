@@ -103,51 +103,52 @@ def app():
                 #     st.pyplot(fig2)
 
                 # st.divider()
-                # c1,c2=st.columns(2)
+                c1,c2=st.columns(2)
 
-                # with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
-                #     if len(results) > 1:
-                #         st.sidebar.markdown("---")
-                #         st.sidebar.info("After entering one well, The options will be available here.")
-                #     else:
-                #         solv = contrib.river_length(aem_model)
+                with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
+                    if len(results) > 1:
+                        st.sidebar.markdown("---")
+                        st.sidebar.info("After entering one well, The options will be available here.")
+                    else:
                         
-                #         length, riv_coords, capture_fraction = solv.solve_river_length()
-                #         tt, ys, avgtt, mintt, traj_array = solv.time_travel(results_aq[0][3], delta_s=0.4, calculate_trajectory=True)
-                #         # st.write(riv_coords)   ########### Changed here to modify capture length 
-                #         ############### Removing Negative Values 
-                #         riv_coords = [max(0., x) for x in riv_coords]
-                #         length=sum(riv_coords)
+                        st.sidebar.title(":red[Contribution Portion:]")
+                        if st.sidebar.checkbox("Bank Filtrate Portion"):
+                            st.subheader(":blue[Bank Filterate Portion:]")
+                            solv = contrib.river_length(aem_model)
                         
-                #         #st.sidebar.markdown("---")
-                #         st.sidebar.title(":red[Contribution Portion:]")
-                #         if st.sidebar.checkbox("Bank Filtrate Portion"):
-                #             st.subheader(":blue[Bank Filterate Portion:]")
-                #             plot = plotting(0, 100, -20, 150, 100, riv_coords)
-                #             b, fig = plot.plot2d(aem_model, sharey=False, traj_array=traj_array, levels=8, quiver=False, streams=True)
-                #             st.pyplot(fig)
-                #             bf_ratio = capture_fraction * 100
-                #             bf_ratio_rounded = int(bf_ratio)
-                #             st.sidebar.metric(label=":blue[Bank Filtrate Portion:]", value="{} %".format(bf_ratio_rounded))
+                            length, riv_coords, capture_fraction = solv.solve_river_length()
+                            tt, ys, avgtt, mintt, traj_array = solv.time_travel(results_aq[0][3], delta_s=0.4, calculate_trajectory=True)
+                            # st.write(riv_coords)   ########### Changed here to modify capture length 
+                            ############### Removing Negative Values 
+                            riv_coords = [max(0., x) for x in riv_coords]
+                            length=sum(riv_coords)
+                        
+                            #st.sidebar.markdown("---")
+                            plot = plotting(0, 100, -20, 150, 100, riv_coords)
+                            b, fig = plot.plot2d(aem_model, sharey=False, traj_array=traj_array, levels=8, quiver=False, streams=True)
+                            st.pyplot(fig)
+                            bf_ratio = capture_fraction * 100
+                            bf_ratio_rounded = int(bf_ratio)
+                            st.sidebar.metric(label=":blue[Bank Filtrate Portion:]", value="{} %".format(bf_ratio_rounded))
 
-                #             riv_length_rounded = int(length)
-                #             st.sidebar.metric(label=":blue[River Capture Length:]", value="{} m".format(riv_length_rounded))
+                            riv_length_rounded = int(length)
+                            st.sidebar.metric(label=":blue[River Capture Length:]", value="{} m".format(riv_length_rounded))
 
 
-                #             riv_0 = riv_coords[0]
-                #             riv_1 = riv_coords[1]
-                #             if riv_0 != 0:
-                #                 riv_0_rounded = riv_0.round(decimals=0)
-                #             else:
-                #                 riv_0_rounded = int(riv_0)
-                #             riv_1_rounded = int(riv_1)
+                            riv_0 = riv_coords[0]
+                            riv_1 = riv_coords[1]
+                            if riv_0 != 0:
+                                riv_0_rounded = riv_0.round(decimals=0)
+                            else:
+                                riv_0_rounded = int(riv_0)
+                            riv_1_rounded = int(riv_1)
 
-                #             st.sidebar.metric(
-                #                 label=":blue[Capture Length Location on Y-Axis:]",
-                #                 value="{} m & {} m".format(riv_0_rounded, riv_1_rounded)
-                #             )
-                # with c2:
-                #     st.write('')
+                            st.sidebar.metric(
+                                label=":blue[Capture Length Location on Y-Axis:]",
+                                value="{} m & {} m".format(riv_0_rounded, riv_1_rounded)
+                            )
+                with c2:
+                    st.write('')
                 
 
 
