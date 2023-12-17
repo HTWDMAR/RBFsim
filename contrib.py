@@ -40,7 +40,7 @@ class river_length(): #Class to calculate river capture length, location and cap
                 return length, sol_el, contrib #Return 3 solution
 
     #general potential qx, qy formulae 
-    def qx(x, y, Q, Qx, xw, yw, d, p):
+    def qx(self, x, y, Q, Qx, xw, yw, d, p):
         head = self.model.calc_head(x,y)
         #Checking if confined or unconfined
         if head > self.model.H:
@@ -50,7 +50,7 @@ class river_length(): #Class to calculate river capture length, location and cap
         #Specific discharge calculation
         return -1*(-Qx + Q/(4*np.pi)*((2*(x-xw)/((x-xw)**2+(y-yw)**2))-(2*(x-(xw-2*d-2*p)))/((x-(xw-2*d-2*p))**2+(y-yw)**2)))/z
 
-    def qy(x, y, Q, Qx, xw, yw, d, p):
+    def qy(self, x, y, Q, Qx, xw, yw, d, p):
         head = self.model.calc_head(x,y)
         #Checking if confined or unconfined
         if head > self.model.H:
@@ -62,10 +62,10 @@ class river_length(): #Class to calculate river capture length, location and cap
             
     #Formulae for correction of the trajectory (Stream function)
 
-    def equation_x(x_a, psi, y_2, Q, Qx, xw, yw, d, p):
+    def equation_x(self, x_a, psi, y_2, Q, Qx, xw, yw, d, p):
         return -Qx*y_2 + (Q/(2*np.pi))*(np.arctan2((y_2-yw), (x_a-xw)) - np.arctan2((y_2-yw), (x_a-(xw-2*d-2*p))))-psi
         
-    def equation_y(y_a, psi, x_2, Q, Qx, xw, yw, d, p):
+    def equation_y(self, y_a, psi, x_2, Q, Qx, xw, yw, d, p):
         return -Qx*y_a + (Q/(2*np.pi))*(np.arctan2((y_a-yw), (x_2-xw)) - np.arctan2((y_a-yw), (x_2-(xw-2*d-2*p))))-psi
 
 
@@ -77,7 +77,7 @@ class river_length(): #Class to calculate river capture length, location and cap
         ys = np.linspace(sol_el[0]+min_dist_est, sol_el[1]-min_dist_est, 20)
         st.write(f"ys {ys}")
         xs = np.repeat(0.1, ys.shape[0])
-        st.wrtie(f"xs {xs}")
+        st.write(f"xs {xs}")
         tt = []
         
         if calculate_trajectory:
