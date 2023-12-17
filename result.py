@@ -118,9 +118,9 @@ def app():
                         
                             length, riv_coords, capture_fraction = solv.solve_river_length()
                             st.write(f'length -- {length}\nriv_coords -- {riv_coords} \ncapture_fraction -- {capture_fraction}')
-                            #----error starts from here------
+                            #----error starts from here: probably in solv.time_travel------
                             tt, ys, avgtt, mintt, traj_array = solv.time_travel(results_aq[0][3], delta_s=0.4, calculate_trajectory=True)
-                            st.write("tt -- {tt}\nys {ys}\navgtt -- {avgtt}\nmintt -- {mintt}\ntraj_array -- {traj_array}")   ########### Changed here to modify capture length 
+                            st.write(f"tt -- {tt}\nys {ys}\navgtt -- {avgtt}\nmintt -- {mintt}\ntraj_array -- {traj_array}")   ########### Changed here to modify capture length 
                             ############### Removing Negative Values 
                             riv_coords = [max(0., x) for x in riv_coords]
                             st.write(f'riv_coords -- {riv_coords}')
