@@ -90,7 +90,7 @@ class river_length(): #Class to calculate river capture length, location and cap
         Qx = self.model.Qo_x
         rw = elem.rw
         p = self.model.p
-
+        st.write("!!!!d=np.abs done...")
 
         
         #Calculation of streamline and time of travel
@@ -123,9 +123,11 @@ class river_length(): #Class to calculate river capture length, location and cap
                 y_2 = np.float64(y1 + delta_s*vy/v_i)
                 x_2 = np.float64(x1 + delta_s*vx/v_i)
 
+                
                 if np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw:
+                    st.write(f"np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw : {np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw}")
                     break
-
+                st.write(f"np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw : {np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw}")
                 #Correcting the point location based on the psi value
                 if vx > vy:
                     sols_y = fsolve(self.equation_y, y_2, (psi, x_2, Q, Qx, xw, yw, d, p), xtol=1e-4)

@@ -77,32 +77,34 @@ def app():
                 c1, c2 = st.columns(2)
 
                 # ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
-                # 2D plot-------
-                if len(results)>(1):
-                    st.subheader(":blue[Wells in Flow Field:]")
-                else:
-                    st.subheader(":blue[Well in Flow Field:]")
-                try:
+                c1, c2 = st.columns(2)
 
+                # ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
+                with c1:
+                    if len(results)>(1):
+                        st.subheader(":blue[Wells in Flow Field:]")
+                    else:
+                        st.subheader(":blue[Well in Flow Field:]")
                     plot1 = plotting(0, 100, -20, 150, 100)
                     b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))
-                    st.pyplot(fig1)                      
-                except Exception as e:
-                    st.error(f'error occurred:{e}')
+                    st.pyplot(fig1)                        
                     
+
+                with c2:
+                    st.write('')
+                    st.write('')
+                    display_3d_plot = st.checkbox(":blue[Display 3D Plot]")
+                    
+                    
+
+                    # Check if the checkbox is checked
+                    if display_3d_plot:
+                        # Assuming `aem_model` is defined somewhere in your code
+                        b2, fig2 = plot1.plot3d(aem_model)
+                        st.pyplot(fig2)
+
                 st.divider()
-
-                #----------3D plot, not using tabs------
-
-                # display_3d_plot = st.checkbox(":blue[Display 3D Plot]")
-                                                          
-                # # Check if the checkbox is checked
-                # if display_3d_plot:
-                #     # Assuming `aem_model` is defined somewhere in your code
-                #     b2, fig2 = plot1.plot3d(aem_model)
-                #     st.pyplot(fig2)
-
-                # st.divider()
+                
                 c1,c2=st.columns(2)
 
                 with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
