@@ -117,14 +117,15 @@ def app():
                             solv = river_length(aem_model)
                         
                             length, riv_coords, capture_fraction = solv.solve_river_length()
-                            st.write(f'length- {length}\nriv_coords- {riv_coords} \ncapture_fraction{capture_fraction}')
+                            st.write(f'length -- {length}\nriv_coords -- {riv_coords} \ncapture_fraction -- {capture_fraction}')
+                            #----error starts from here------
                             tt, ys, avgtt, mintt, traj_array = solv.time_travel(results_aq[0][3], delta_s=0.4, calculate_trajectory=True)
-                            # st.write(riv_coords)   ########### Changed here to modify capture length 
+                            st.write("tt -- {tt}\nys {ys}\navgtt -- {avgtt}\nmintt -- {mintt}\ntraj_array -- {traj_array}")   ########### Changed here to modify capture length 
                             ############### Removing Negative Values 
                             riv_coords = [max(0., x) for x in riv_coords]
-                            st.write(f'riv_coords- {riv_coords}')
+                            st.write(f'riv_coords -- {riv_coords}')
                             length=sum(riv_coords)
-                            st.write(f'length- {length}')
+                            st.write(f'length -- {length}')
                             #st.sidebar.markdown("---")
                             plot = plotting(0, 100, -20, 150, 100, riv_coords)
                             b, fig = plot.plot2d(aem_model, sharey=False, traj_array=traj_array, levels=8, quiver=False, streams=True)
