@@ -72,12 +72,9 @@ class river_length(): #Class to calculate river capture length, location and cap
     def time_travel(self, ne, delta_s = 0.1, calculate_trajectory=False, min_dist_est=0.1): #Function to calulcate time of travel
 
         length, sol_el, contrib = self.solve_river_length()
-        st.write(f"length {length}, sol_el {sol_el}, contrib {contrib}")
 
         ys = np.linspace(sol_el[0]+min_dist_est, sol_el[1]-min_dist_est, 20)
-        st.write(f"ys {ys}")
         xs = np.repeat(0.1, ys.shape[0])
-        st.write(f"xs {xs}")
         tt = []
         
         if calculate_trajectory:
@@ -134,20 +131,16 @@ class river_length(): #Class to calculate river capture length, location and cap
                     sols_y = fsolve(self.equation_y, y_2, (psi, x_2, Q, Qx, xw, yw, d, p), xtol=1e-4)
                     sol_el_y = sols_y[0]
                     y_2 = sol_el_y
-                    st.write("y_2 -- {sol_el_y}")
 
                 else:
                     sols = fsolve(self.equation_x, x_2, (psi, y_2, Q, Qx, xw, yw, d, p), xtol=1e-4)
                     sol_el_x = sols[0]
                     x_2 = sol_el_x
-                    st.write("x_2 -- {sol_el_x}")
                 #Calculating distance
                 dist = np.sqrt((x_2-x1)**2 + (y_2-y1)**2)
 
                 qx2 = self.qx(x_2, y_2, Q, Qx, xw, yw, d, p)
-                st.write(f"qx2 - {qx2}")
                 qy2 = self.qy(x_2, y_2, Q, Qx, xw, yw, d, p)
-                st.write(f"qy2 - {qy2}")
                 vx2 = qx2/ne
                 vy2 = qy2/ne
 
