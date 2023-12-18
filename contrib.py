@@ -72,11 +72,9 @@ class river_length(): #Class to calculate river capture length, location and cap
     def time_travel(self, ne, delta_s = 0.1, calculate_trajectory=False, min_dist_est=0.1): #Function to calulcate time of travel
 
         length, sol_el, contrib = self.solve_river_length()
-        st.write("!!!!contrib.py--length, sol_el, contrib")
         ys = np.linspace(sol_el[0]+min_dist_est, sol_el[1]-min_dist_est, 20)
         xs = np.repeat(0.1, ys.shape[0])
         tt = []
-        st.write("!!!!contrib.py--length, ys, xs")
         if calculate_trajectory:
             traj_array = []
 
@@ -90,7 +88,6 @@ class river_length(): #Class to calculate river capture length, location and cap
         Qx = self.model.Qo_x
         rw = elem.rw
         p = self.model.p
-        st.write("!!!!d=np.abs done...")
 
         
         #Calculation of streamline and time of travel
@@ -125,9 +122,8 @@ class river_length(): #Class to calculate river capture length, location and cap
 
                 
                 if np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw:
-                    st.write(f"np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw : {np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw}")
                     break
-                st.write(f"np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw : {np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw}")
+                    
                 #Correcting the point location based on the psi value
                 if vx > vy:
                     sols_y = fsolve(self.equation_y, y_2, (psi, x_2, Q, Qx, xw, yw, d, p), xtol=1e-4)
