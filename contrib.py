@@ -126,12 +126,12 @@ class river_length(): #Class to calculate river capture length, location and cap
                     
                 #Correcting the point location based on the psi value
                 if vx > vy:
-                    sols_y = fsolve(self.equation_y, y_2, (psi, x_2, Q, Qx, xw, yw, d, p), xtol=1e-4)
+                    sols_y = fsolve(self.equation_y, y_2, (psi, x_2, Q, Qx, xw, yw, d, p), xtol=1e-2)
                     sol_el_y = sols_y[0]
                     y_2 = sol_el_y
 
                 else:
-                    sols = fsolve(self.equation_x, x_2, (psi, y_2, Q, Qx, xw, yw, d, p), xtol=1e-4)
+                    sols = fsolve(self.equation_x, x_2, (psi, y_2, Q, Qx, xw, yw, d, p), xtol=1e-2)
                     sol_el_x = sols[0]
                     x_2 = sol_el_x
                 #Calculating distance
