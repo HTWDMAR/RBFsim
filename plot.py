@@ -80,8 +80,8 @@ class plotting: #Class to assist plotting of the results
 
         else:
             fig.delaxes(ax[0])
-        ax[1].set_ylim(0, None)   # Modify here to show entire system
-        ax[0].set_ylim(0, None)  ## Modify here to show entrie system
+        ax[1].set_ylim(0, 150)   # Modify here to show entire system # PKY changed from None to 150 20.12.23
+        ax[0].set_ylim(0, 150)  ## Modify here to show entrie system # PKY changed from None to 150
         return ax, fig
 
     def plot3d(self, model): #3D Plotting of the results
