@@ -253,7 +253,7 @@ def app():
                     with col1:
                         new_well_id = st.number_input("Well ID (n)", well_id)
                         #----------limit pump_rate input upto 50 for 2D and 3D plot runtime error-----------------
-                        new_pump_rate = st.number_input("Pumping / Recharge Rate in (m\u00B3/day):", -10000., 50., float(pump_rate),help='-ve Pumping, +ve Recharge')
+                        new_pump_rate = st.number_input("Pumping / Recharge Rate in (m\u00B3/day):", -1000., 1000., float(pump_rate),help='-ve Pumping, +ve Recharge')
                         #st.warning('Please keep the Pumping Rate < 50 to generate 3D plot.', icon="⚠️")
                     with col2:
                         new_x_coo = st.number_input("X-Coordinate (m)", 1., 199., float(x_coo))
