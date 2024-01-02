@@ -3,4 +3,4 @@ sympy
 scipy
 streamlit
 openpyxl
-fpdf
+fpdf2
