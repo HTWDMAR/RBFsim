@@ -214,18 +214,23 @@ def app():
                                 
                 st.sidebar.markdown("---")
                 # user_name = st.sidebar.text_input("Enter Username:")
-                report_download = st.sidebar.button(label="Download Report in PDF")
+                report_download = st.sidebar.button(label="Export Report to PDF")
                 if report_download:                    
                     # if user_name:
                     #     download_report(user_name, value_list_dfs, plots)
                     # else:
                     download_report("anon", value_list_dfs, plots)
+                        
                 st.sidebar.markdown("---")
                 st.sidebar.title("Download \u03C8 & Head:")
                 st.sidebar.download_button(label="Download H in CSV", data=csv, mime="csv")
                 st.sidebar.download_button(label="Download \u03C8 in CSV", data=csv_psi, mime="csv")
 
             st.sidebar.markdown("---")
+
+def create_download_link(val, filename):
+    b64 = base64.b64encode(val)  # val looks like b'...'
+    return f'<a href="data:application/octet-stream;base64,{b64.decode()}" download="{filename}.pdf">Download PDF</a>'
 
 def download_report(user, value_list_dfs, plots):
     pdf=FPDF(orientation="P", unit="mm", format="A4")
@@ -312,4 +317,6 @@ def download_report(user, value_list_dfs, plots):
         row_count += 1
 
     
-    pdf.output('report.pdf')
+    html = create_download_link(pdf.output(dest="S"), "Report")
+
+    st.sidebar.markdown(html, unsafe_allow_html=True)
