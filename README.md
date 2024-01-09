@@ -36,7 +36,7 @@ The code currently can be used both as offline (preferred) and online mode (in d
 ### Running the online app
 
 The online app of RBFsim can be run from:
-[**https://rbfsim-dup.streamlit.app/**](https://rbfsim-dup.streamlit.app/)
+[**https://rbf-sim.streamlit.app/**](https://rbf-sim.streamlit.app/)
 
 ## Output from RBFsim
 RBFsim provides visuals as wells as numerical results. The numerical results can be downloaded as **CSV** file. The graphics can be downloaded as **PNG** file. Check the user [manual](https://github.com/HTWDMAR/RBFsim/blob/main/Manual/RBFsim%20User%20Manual_03.09.2022.pdf) for more complete details.
