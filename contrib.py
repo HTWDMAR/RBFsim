@@ -39,42 +39,14 @@ class river_length(): #Class to calculate river capture length, location and cap
 
                 return length, sol_el, contrib #Return 3 solution
 
-    #general potential qx, qy formulae 
-    def qx(self, x, y, Q, Qx, xw, yw, d, p):
-        head = self.model.calc_head(x,y)
-        #Checking if confined or unconfined
-        if head > self.model.H:
-            z = self.model.H
-        else:
-            z = head
-        #Specific discharge calculation
-        return -1*(-Qx + Q/(4*np.pi)*((2*(x-xw)/((x-xw)**2+(y-yw)**2))-(2*(x-(xw-2*d-2*p)))/((x-(xw-2*d-2*p))**2+(y-yw)**2)))/z
-
-    def qy(self, x, y, Q, Qx, xw, yw, d, p):
-        head = self.model.calc_head(x,y)
-        #Checking if confined or unconfined
-        if head > self.model.H:
-            z = self.model.H
-        else:
-            z = head
-        #Specific discharge calculation
-        return -1*(Q/(4*np.pi)*((2*(y-yw)/((x-xw)**2+(y-yw)**2))-(2*(y-yw))/((x-(xw-2*d-2*p))**2+(y-yw)**2)))/z
-            
-    #Formulae for correction of the trajectory (Stream function)
-
-    def equation_x(self, x_a, psi, y_2, Q, Qx, xw, yw, d, p):
-        return -Qx*y_2 + (Q/(2*np.pi))*(np.arctan2((y_2-yw), (x_a-xw)) - np.arctan2((y_2-yw), (x_a-(xw-2*d-2*p))))-psi
-        
-    def equation_y(self, y_a, psi, x_2, Q, Qx, xw, yw, d, p):
-        return -Qx*y_a + (Q/(2*np.pi))*(np.arctan2((y_a-yw), (x_2-xw)) - np.arctan2((y_a-yw), (x_2-(xw-2*d-2*p))))-psi
-
-
     def time_travel(self, ne, delta_s = 0.1, calculate_trajectory=False, min_dist_est=0.1): #Function to calulcate time of travel
 
         length, sol_el, contrib = self.solve_river_length()
+
         ys = np.linspace(sol_el[0]+min_dist_est, sol_el[1]-min_dist_est, 20)
         xs = np.repeat(0.1, ys.shape[0])
         tt = []
+        
         if calculate_trajectory:
             traj_array = []
 
@@ -89,7 +61,36 @@ class river_length(): #Class to calculate river capture length, location and cap
         rw = elem.rw
         p = self.model.p
 
+
+        #general potential qx, qy formulae 
+        def qx(x, y, Q, Qx, xw, yw, d, p):
+            head = self.model.calc_head(x,y)
+            #Checking if confined or unconfined
+            if head > self.model.H:
+                z = self.model.H
+            else:
+                z = head
+            #Specific discharge calculation
+            return -1*(-Qx + Q/(4*np.pi)*((2*(x-xw)/((x-xw)**2+(y-yw)**2))-(2*(x-(xw-2*d-2*p)))/((x-(xw-2*d-2*p))**2+(y-yw)**2)))/z
+
+        def qy(x, y, Q, Qx, xw, yw, d, p):
+            head = self.model.calc_head(x,y)
+            #Checking if confined or unconfined
+            if head > self.model.H:
+                z = self.model.H
+            else:
+                z = head
+            #Specific discharge calculation
+            return -1*(Q/(4*np.pi)*((2*(y-yw)/((x-xw)**2+(y-yw)**2))-(2*(y-yw))/((x-(xw-2*d-2*p))**2+(y-yw)**2)))/z
+            
+        #Formulae for correction of the trajectory (Stream function)
+
+        def equation_x(x_a, psi, y_2, Q, Qx, xw, yw, d, p):
+            return -Qx*y_2 + (Q/(2*np.pi))*(np.arctan2((y_2-yw), (x_a-xw)) - np.arctan2((y_2-yw), (x_a-(xw-2*d-2*p))))-psi
         
+        def equation_y(y_a, psi, x_2, Q, Qx, xw, yw, d, p):
+            return -Qx*y_a + (Q/(2*np.pi))*(np.arctan2((y_a-yw), (x_2-xw)) - np.arctan2((y_a-yw), (x_2-(xw-2*d-2*p))))-psi
+
         #Calculation of streamline and time of travel
 
         for x,y in zip(xs, ys):
@@ -110,8 +111,8 @@ class river_length(): #Class to calculate river capture length, location and cap
             while np.sqrt((x1-xw)**2+(y1-yw)**2) > 5*rw:
                 #1.Calculating velocity
                 dista1 = np.sqrt((x1-xw)**2+(y1-yw)**2)
-                qx1 = self.qx(x1, y1, Q, Qx, xw, yw, d, p)
-                qy1 = self.qy(x1, y1, Q, Qx, xw, yw, d, p)
+                qx1 = qx(x1, y1, Q, Qx, xw, yw, d, p)
+                qy1 = qy(x1, y1, Q, Qx, xw, yw, d, p)
                 vx = qx1/ne
                 vy = qy1/ne
                 v_i = np.sqrt(vx**2+vy**2)
@@ -120,28 +121,27 @@ class river_length(): #Class to calculate river capture length, location and cap
                 y_2 = np.float64(y1 + delta_s*vy/v_i)
                 x_2 = np.float64(x1 + delta_s*vx/v_i)
 
-                
                 if np.sqrt((x_2-xw)**2+(y_2-yw)**2) < rw:
                     break
-                    
+
                 #Correcting the point location based on the psi value
                 if vx > vy:
-                    sols_y = fsolve(self.equation_y, y_2, (psi, x_2, Q, Qx, xw, yw, d, p), xtol=1e-1)
+                    sols_y = fsolve(equation_y, y_2, (psi, x_2, Q, Qx, xw, yw, d, p), xtol=1e-1)
                     sol_el_y = sols_y[0]
                     y_2 = sol_el_y
 
                 else:
-                    sols = fsolve(self.equation_x, x_2, (psi, y_2, Q, Qx, xw, yw, d, p), xtol=1e-1)
+                    sols = fsolve(equation_x, x_2, (psi, y_2, Q, Qx, xw, yw, d, p), xtol=1e-1)
                     sol_el_x = sols[0]
                     x_2 = sol_el_x
+
                 #Calculating distance
                 dist = np.sqrt((x_2-x1)**2 + (y_2-y1)**2)
 
-                qx2 = self.qx(x_2, y_2, Q, Qx, xw, yw, d, p)
-                qy2 = self.qy(x_2, y_2, Q, Qx, xw, yw, d, p)
+                qx2 = qx(x_2, y_2, Q, Qx, xw, yw, d, p)
+                qy2 = qy(x_2, y_2, Q, Qx, xw, yw, d, p)
                 vx2 = qx2/ne
                 vy2 = qy2/ne
-
 
                 #Calculating mean velocity
                 vxm = np.mean([vx, vx2])
@@ -173,8 +173,8 @@ class river_length(): #Class to calculate river capture length, location and cap
         #Calculate qxs (Specific Discharge)
         qs = []
         for x,y in zip(xs,ys):
-            qx1 = self.qx(x, y, Q, Qx, xw, yw, d, p)
-            qy1 = self.qy(x, y, Q, Qx, xw, yw, d, p)
+            qx1 = qx(x, y, Q, Qx, xw, yw, d, p)
+            qy1 = qy(x, y, Q, Qx, xw, yw, d, p)
             q = np.sqrt(qx1**2+qy1**2)
             qs.append(q)
 
@@ -199,6 +199,7 @@ class river_length(): #Class to calculate river capture length, location and cap
             return tt, ys, avgtt, mintt, traj_array
 
         else:
+
             return tt, ys, avgtt, mintt       
 
 
