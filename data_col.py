@@ -438,7 +438,7 @@ def app():
 
         #st.sidebar.markdown("---")
 
-    
+    print(st.session_state.cf_ls)
 
     with updown :
 

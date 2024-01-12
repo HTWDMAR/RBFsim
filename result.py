@@ -240,8 +240,8 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict):
     pdf=PDF('P', 'mm')
     pdf.proj_title = title
     pdf.add_page(format='A4')    
-    pdf.set_text_color(0, 71, 171)
-    pdf.set_font('Arial', 'I', 12)
+    pdf.set_text_color(0, 51, 102)
+    pdf.set_font('Arial', 'I', 9)
     pdf.cell(0, 8, f"Date:{date.today()}", align="R")
     pdf.set_text_color(0, 0, 0)
     pdf.ln(10)
@@ -299,7 +299,7 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict):
         
         if row_count == 0 and (pdf.get_y() + img_height + 15) > pdf.h:
             pdf.add_page(format='A4')    
-            pdf.set_margins(10, 10, 10)
+            pdf.set_margins(12, 10, 12)
             pdf.set_x(10)
             pdf.ln(5)
         

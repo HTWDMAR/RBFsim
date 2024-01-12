@@ -51,7 +51,7 @@ def app():
 			Qx_beta = st.number_input("Baseflow in X-Direction [m\u00B2/day]:",1.,1000.,1.)
 			d_button = st.button("Calculate Distance")
 			d_value = Q_beta/(np.pi*(beta+1)*Qx_beta)
-			d_value_int = np.float16(d_value)
+			d_value_int = round(np.float16(d_value), 3)
 			if d_button:
 				st.markdown(""" ### Distance to the Well = {} m """.format(d_value_int))					
 		with t2:
