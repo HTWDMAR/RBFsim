@@ -28,7 +28,7 @@ def app():
     #st.divider()
     #st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
     
-    aq_dc,well_dc,clo_dc,updown = st.tabs(["**Aquifer**", "**Well**","**Clogging Factor**","**Upload/Downlaod Data**"])
+    aq_dc,well_dc,clo_dc,updown = st.tabs(["**Aquifer**", "**Well**","**Clogging Factor**","**View/Upload/Download Data**"])
     st.write("")
     with aq_dc :
         col1, col2 = st.columns(2)
@@ -444,7 +444,21 @@ def app():
 
         st.header(":blue[Data Retrival and Backup]")
 
-        retri,back=st.tabs(["**Data Retrival**","**Data Backup**"])
+        view,retri,back=st.tabs(["**View Data**","**Upload Data**","**Download Data**"])
+        with view:
+            if not bool(st.session_state.aq_ls) and not bool(st.session_state.we_ls) and not bool(st.session_state.cf_ls):
+
+                st.info("No data added yet!")
+            else:
+                if st.session_state.aq_ls:
+                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
+                    st.dataframe(df3_aq)
+                if st.session_state.we_ls:
+                    df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
+                    st.dataframe(df)
+                if st.session_state.cf_ls:
+                    df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value'])
+                    st.dataframe(df_clg)
 
         with retri :
             # Upload the file (CSV or Excel)
@@ -511,7 +525,7 @@ def app():
             st.download_button(label=f'Download {format_option}', data=data, file_name=file_name, key='merged_data', mime=mime_type)
 
             # Display the merged dataframe
-            st.dataframe(merged_df)
+            # st.dataframe(merged_df)
 
 
 

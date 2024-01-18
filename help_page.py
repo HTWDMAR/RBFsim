@@ -51,7 +51,7 @@ def app():
 			Qx_beta = st.number_input("Baseflow in X-Direction [m\u00B2/day]:",1.,1000.,1.)
 			d_button = st.button("Calculate Distance")
 			d_value = Q_beta/(np.pi*(beta+1)*Qx_beta)
-			d_value_int = round(np.float16(d_value), 3)
+			d_value_int = np.round(np.float64(d_value), 2)
 			if d_button:
 				st.markdown(""" ### Distance to the Well = {} m """.format(d_value_int))					
 		with t2:
@@ -90,7 +90,7 @@ def app():
 			dist_beta = st.number_input("Distance from the Well [m]:",1.,200.,1.)
 			Qx_button = st.button("Calculate Baseflow")
 			Qx_beta_1 = Q_beta/(np.pi*(beta+1)*dist_beta)
-			Qx_beta_1_int = np.float16(Qx_beta_1)
+			Qx_beta_1_int = np.round(np.float64(Qx_beta_1), 2)
 			if Qx_button:
                                 st.markdown(""" ### Base Flow in X-Direction = {} m\u00B2/day """.format(Qx_beta_1_int))
 
@@ -127,7 +127,7 @@ def app():
 			dist_beta = st.number_input("Distance from the Well [m]:",1.,201.,1.)
 			Q_button = st.button("Calculate Well Q")
 			Q_beta_1 = Qx_beta*dist_beta*np.pi*(beta+1)
-			Q_beta_1_int = np.float16(Q_beta_1)	
+			Q_beta_1_int = np.round(np.float64(Q_beta_1), 2)	
 			if Q_button:
 				st.markdown(""" ### Well Discharge = {} m\u00B3/day """.format(Q_beta_1_int))
 		with t3:

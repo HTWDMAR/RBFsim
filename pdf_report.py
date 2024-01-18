@@ -19,11 +19,10 @@ class PDF(FPDF):
         title = f'{self.proj_title}'
         title_width = self.get_string_width(title)
         title_x_pos = (self.w - title_width)/2
-        self.set_xy(title_x_pos, 22)
-        self.cell(0,0,f'{title}', 'C')
+        self.set_xy(title_x_pos, 23)
+        self.cell(0,0,f'{title}', 'C', ln=2)
         self.set_x(5)
-        self.set_y(22)
-        self.set_text_color(255, 0, 0)
+        self.set_y(24)
         self.set_font('Arial', 'I', 10)
         self.cell(0, 5, 'RBFSim Tool', ln=1)
         self.set_font('Arial', 'I', 9)
@@ -37,10 +36,10 @@ class PDF(FPDF):
         self.cell(self.w, 5, 'The authors of RBFSim tool are not liable for the results generated.', 0, 1, 'C')
         self.rotate(0)
         self.set_xy(original_x, original_y)
-        self.set_margins(12, 10, 12)
+        self.set_margins(20, 10, 10)
 
     
     def footer(self):
         self.set_y(-12)
         self.set_font('Arial', 'I', 8)
-        self.multi_cell(0, 3,'BMBF Project: Feasibility of Managed Aquifer Recharge for safe and sustainable water supply (FEMAR, Nr: FKZ 02WME1612A-C) \nContact: Prof. Thomas Grischek, HTW Dresden, Friedrich-List-Platz 1, D-01069 Dresden Email: thomas.grischek@htw-dresden.de', align = 'C')
+        self.multi_cell(0, 3,'BMBF Project: Feasibility of Managed Aquifer Recharge for safe and sustainable water supply (FEMAR, FKZ 02WME1612A-C) \nContact: Prof. Thomas Grischek, HTW Dresden, Friedrich-List-Platz 1, D-01069 Dresden Email: thomas.grischek@htw-dresden.de', align = 'C', ln=2)
