@@ -60,15 +60,15 @@ def app():
             with col1:
                 #aq_id = st.number_input('Aquifer ID[n]', 1,1,1)
                 aq_id=1
-                thk_aq = st.number_input('Thickness of the Aquifer (m)', 1.,500.,20.)
-                baseflow = st.number_input('Base Flow (m\u00B2/day):', -10000., 10000.,0.1)
+                thk_aq = st.number_input('Thickness of the Aquifer (m)', 1.,200.,20.)
+                baseflow = st.number_input('Base Flow (m\u00B2/day):', 0., 1000.,1.)
             with col2:
                 
-                ref_head = st.number_input('Refernce Head (m)', 1.,200.,9.5)
-                porosity = st.number_input('Porosity:', 0.00,1.00,0.25,help='< 0.5')
+                ref_head = st.number_input('Reference Head (m)', 1.,200.,9.5)
+                porosity = st.number_input('Porosity:', 0.1,0.4,0.25,help='< 0.5')
             with col3:
                 
-                hyd_con = st.number_input('Hydraulic Conductivity (m/day)', 1, 1000, 10, help='Range : 10-1000')
+                hyd_con = st.number_input('Hydraulic Conductivity (m/day)', 1., 1000., 10., help='Range : 1 - 1000')
             
             if st.button("Add Values for Aquifier"):
                 #add_data_aq(aq_id, thk_aq, baseflow, porosity, hyd_con, ref_head)   ########### Need to add st.session state out here if want to use new format
@@ -79,14 +79,14 @@ def app():
         elif choice_aq == "Update Data":
             if len(st.session_state.aq_ls)== 0 :
                 st.write("Enter Data, Current Data set Empty")
-                df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
+                df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Reference Head'])
                 st.dataframe(df3_aq)
             if len(st.session_state.aq_ls)!= 0 :
                 st.subheader("Edit/Update Values")
                 #results_aq = view_all_data_aq()
                 #st.write(results_aq)
                 with st.expander("View All Data"):
-                    df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
+                    df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Reference Head'])
                     st.dataframe(df_aq)
 
                 list_of_data_aq = [i[0] for i in st.session_state.aq_ls]                  #### Need to read aq_dat and give flxibility to modify
@@ -107,16 +107,16 @@ def app():
                     with col1:
                         #new_aq_id = st.number_input("Aquifer ID:", aq_id)
                         new_aq_id=1
-                        new_thk_aq = st.number_input("Thickness of the Aquifer (m):",1.,500., float(thk_aq))
-                        new_baseflow = st.number_input("Base Flow (m\u00B2/day):",-100.,100., float(baseflow))
+                        new_thk_aq = st.number_input("Thickness of the Aquifer (m):",1.,200., float(thk_aq))
+                        new_baseflow = st.number_input("Base Flow (m\u00B2/day):",0.,1000., float(baseflow))
                     with col2:
                         
-                        new_ref_head = st.number_input("Refernce Head (m):", 1., 500., float(ref_head))
+                        new_ref_head = st.number_input("Reference Head (m):", 1., 500., float(ref_head))
                         new_porosity = st.number_input("Porosity:",0., 1., float(porosity),help='< 0.5')
                     with col3:
                         
                         
-                        new_hyd_con = st.number_input("Hydraulic Conductivity (m/day):",0.1, 1000., float(hyd_con),help='Range : 10-1000')
+                        new_hyd_con = st.number_input("Hydraulic Conductivity (m/day):",1., 1000., float(hyd_con),help='Range : 1 - 1000')
                     
                     if st.button("Update Values for Aquifier"):
                         
@@ -130,21 +130,21 @@ def app():
 
                 #results2_aq = view_all_data_aq()
                 with st.expander("Updated Data"):
-                    df2_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
+                    df2_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Reference Head'])
                     st.dataframe(df2_aq)
 
 #----------------------------------------------------------------------Delete_aq-------------------------------------------------------------------------------------------------
         elif choice_aq == "Delete Data":
             if len(st.session_state.aq_ls)== 0 :
                 st.write("Enter Data, Current Data set Empty")
-                df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
+                df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Reference Head'])
                 st.dataframe(df3_aq)
             if len(st.session_state.aq_ls)!= 0 :
                 st.subheader("Delete Values")
                 #results_aq = view_all_data_aq()
                 #st.write(results_aq)
                 with st.expander("View All Data"):
-                    df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
+                    df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Reference Head'])
                     st.dataframe(df_aq)
 
                 list_of_data_aq = [i[0] for i in st.session_state.aq_ls]      
@@ -157,7 +157,7 @@ def app():
 
                 #results3_aq = view_all_data_aq()
                 with st.expander("Current Data"):
-                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
+                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Reference Head'])
                     st.dataframe(df3_aq)
 
         st.divider()
@@ -172,10 +172,10 @@ def app():
             if st.checkbox("Display Current Aquifier Data"):
             #st.write(results_aq)
         #with st.expander("View All Data"):
-                df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
+                df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Reference Head'])
                 st.dataframe(df_aq)
-                #df_aq = pd.DataFrame(results_aq, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
-                if st.download_button(label='Download Table', data=df_aq.to_csv(),mime='text/csv'):
+                #df_aq = pd.DataFrame(results_aq, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Reference Head'])
+                if st.download_button(key="aquifier_download", label='Download Table', data=df_aq.to_csv(),mime='text/csv'):
                     st.success("Your File Successfully Downloaded")
         st.divider()
         #st.session_state.aq_ls=aq_ls
@@ -212,13 +212,13 @@ def app():
             #Layout of the Main_Page
             col1, col2 = st.columns(2)
             with col1:
-                well_id = st.number_input("Well ID (n)", 1, 10, 1)
+                well_id = int(st.number_input("Well ID (n)", 1, 10, 1))
                 #----------limit pump_rate input upto 50 for 2D and 3D plot runtime error-----------------
-                pump_rate = st.number_input("Pumping / Recharge Rate in (m³/day):", -1000., 1000., 50., 1.,help='-ve Pumping, +ve Recharge')
+                pump_rate = st.number_input("Pumping / Recharge Rate in (m³/day):", -5000., 5000., 1000., 1.,help='-ve Pumping, +ve Recharge')
                 #st.warning('Please keep the Pumping Rate < 50 to generate 3D plot.', icon="⚠️")
             with col2:
-                x_coo = st.number_input("X-Coordinate of Well (m)", 1, 199,30)
-                y_coo = st.number_input("Y-Coordinate of Well (m)", 1, 199,60)
+                x_coo = st.number_input("X-Coordinate of Well (m)", 1, 199, 30)
+                y_coo = st.number_input("Y-Coordinate of Well (m)", 100, 899, 200)
 
             if st.button("Add Values for Well"):
                 st.session_state.we_ls.append([well_id, pump_rate, x_coo, y_coo])
@@ -251,13 +251,13 @@ def app():
 
                     col1, col2 = st.columns(2)
                     with col1:
-                        new_well_id = st.number_input("Well ID (n)", well_id)
+                        new_well_id = int(st.number_input("Well ID (n)", well_id))
                         #----------limit pump_rate input upto 50 for 2D and 3D plot runtime error-----------------
-                        new_pump_rate = st.number_input("Pumping / Recharge Rate in (m\u00B3/day):", -1000., 1000., float(pump_rate),help='-ve Pumping, +ve Recharge')
+                        new_pump_rate = st.number_input("Pumping / Recharge Rate in (m\u00B3/day):", -5000., 5000., float(pump_rate),help='-ve Pumping, +ve Recharge')
                         #st.warning('Please keep the Pumping Rate < 50 to generate 3D plot.', icon="⚠️")
                     with col2:
                         new_x_coo = st.number_input("X-Coordinate (m)", 1., 199., float(x_coo))
-                        new_y_coo = st.number_input("Y-Coordinate (m)", 1.,199., float(y_coo))
+                        new_y_coo = st.number_input("Y-Coordinate (m)", 100.,899., float(y_coo))
 
                     if st.button("Update Values for Well"):
                         st.session_state.we_ls = [sublist for sublist in st.session_state.we_ls if sublist[0] != selected_data]
@@ -310,8 +310,8 @@ def app():
                 df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
                 st.dataframe(df)
                 #df = pd.DataFrame(results, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
-                if st.download_button(label='Download Table', data=df.to_csv(),mime='text/csv'):
-                    st.success("Your File Successfully Downloaded")
+                if st.download_button(key="well_download", label='Download Table', data=df.to_csv(),mime='text/csv'):
+                    st.success("Your File was Successfully Downloaded")
         st.divider()
         #st.session_state.we_ls=we_ls
     #st.session_state.we_ls=we_ls
@@ -348,9 +348,9 @@ def app():
                     with col1:
                         #clg_id = st.number_input("Colmation Layer ID (n):", 1.,1.,1.)
                         clg_id=1
-                        kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0., 1000., 20.)
+                        kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0.01, 10., 0.1)
                     with col2:
-                        dc = st.number_input("Thickness of Clogged Layer (cm):", 0., 1000.,5.)
+                        dc = st.number_input("Thickness of Clogged Layer (cm):", 0., 50.,1.)
                         dc=dc/100
                     if st.button("Add Values for Clogging Factor"):
                         st.session_state.cf_ls.append([clg_id, kd, dc])
@@ -382,11 +382,11 @@ def app():
                             
                             with col1:
                                 #new_clg_id = st.number_input("Colmation Layer ID (n):", 1.,1., float(clg_id))
-                                new_kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0., 1000., float(kd))
+                                new_kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0.01, 10., float(kd))
                                 new_clg_id=1
                             with col2:
                                 #new_kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0., 1000., float(kd))
-                                new_dc = st.number_input("Thickness of Layer (m):", 0., 1000., float(dc))
+                                new_dc = st.number_input("Thickness of Layer (m):", 0., 50., float(dc))
 
                             if st.button("Update Values."):
                                 st.session_state.cf_ls=[]
@@ -438,7 +438,7 @@ def app():
 
         #st.sidebar.markdown("---")
 
-    print(st.session_state.cf_ls)
+    
 
     with updown :
 
@@ -451,7 +451,7 @@ def app():
                 st.info("No data added yet!")
             else:
                 if st.session_state.aq_ls:
-                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
+                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Reference Head'])
                     st.dataframe(df3_aq)
                 if st.session_state.we_ls:
                     df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
@@ -526,6 +526,8 @@ def app():
 
             # Display the merged dataframe
             # st.dataframe(merged_df)
+
+
 
 
 
