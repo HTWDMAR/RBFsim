@@ -11,7 +11,7 @@ class river_length(): #Class to calculate river capture length, location and cap
     
     def solve_river_length(self):
         if (len(self.model.aem_elements) > 1) | (len(self.model.aem_elements) == 0):
-            st.write("Failed to drive solution")
+            st.write("Failed to derive solution")
         else:
             y = sympy.symbols('y')
             elem = self.model.aem_elements[0]
@@ -33,7 +33,7 @@ class river_length(): #Class to calculate river capture length, location and cap
                 sol_el = []
                 for i in sols: #Putting solution in a list
                     sol_el.append(np.float64(i+yw)) #Correcting the solution to the well y position
-                length = np.abs(sol_el[0]-sol_el[1]) #River capture length
+                length = np.abs(sol_el[1]-sol_el[0]) #River capture length np.abs(sol_el[0])-np.abs(sol_el[1]) #
                 Q_river = self.model.calc_psi(0, sol_el[0]) - self.model.calc_psi(0, sol_el[1]) + Q #Bank filtrate portion
                 contrib = Q_river/Q #Bank filtrate ratio
 
@@ -161,7 +161,7 @@ class river_length(): #Class to calculate river capture length, location and cap
                     yss.append(y1)
 
             #Adding time of travel estimate
-            tt.append(np.nansum(np.array(t_arr))) #using nansum instead of np.sum to handle Nan values in array
+            tt.append(np.nansum(np.array(t_arr)))
 
             #Saving the particle trajectory in a numpy array
             if calculate_trajectory:

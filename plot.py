@@ -80,17 +80,17 @@ class plotting: #Class to assist plotting of the results
 
         else:
             fig.delaxes(ax[0])
-        ax[1].set_ylim(0, 150)   # Modify here to show entire system # PKY changed from None to 150 20.12.23
-        ax[0].set_ylim(0, 150)  ## Modify here to show entrie system # PKY changed from None to 150
+        ax[1].set_ylim(0, 1000)   # Modify here to show entire system # PKY changed from None to 150 20.12.23
+        ax[0].set_ylim(0, 1000)  ## Modify here to show entrie system # PKY changed from None to 150
         return ax, fig
 
     def plot3d(self, model): #3D Plotting of the results
         fig, ax = plt.subplots(figsize=(15, 20), subplot_kw={'projection': "3d"})
-        surf = ax.plot_surface(self.mesh()[0], self.mesh()[1], self.fix_to_mesh(model)[0], cmap=cm.coolwarm, linewidth=0, antialiased=True)
+        surf = ax.plot_surface(self.mesh()[0], self.mesh()[1], self.fix_to_mesh(model)[0], cmap=cm.coolwarm_r, linewidth=0, antialiased=True)
         ax.zaxis.set_major_formatter(StrMethodFormatter('{x:,.4f}'))  # Corrected format specifier
         ax.set_xlabel('Length of Domain (m)', fontsize=25, labelpad=25)  # Increase font size and labelpad
         ax.set_ylabel('Width of Domain (m)', fontsize=25, labelpad=28)  # Increase font size and labelpad
-        ax.set_zlabel('Drawdown (m)', fontsize=25, labelpad=5)  # Increase font size and labelpad
+        ax.set_zlabel('Hydraulic Head (m)', fontsize=25, labelpad=5)  # Increase font size and labelpad
         colorbar = fig.colorbar(surf, shrink=0.5, ax=ax, location="right")
         colorbar.ax.tick_params(labelsize=25)  # Set the font size for colorbar labels
 

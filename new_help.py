@@ -6,7 +6,7 @@ from PIL import Image
 def app():
     st.title(":red[Help Page]")
     #st.divider()
-    e1, e2 = st.tabs(["**Software Manual**", "Literature Manual"])
+    e1, e2, e3 = st.tabs(["**Software Manual**", "**Literature Manual**", "**Download Literature Manual**"])
     with e1:
         
         st.subheader(":blue[How to use the software]")
@@ -138,6 +138,18 @@ def app():
             
 
     with e2:
+        
+
         pdf_display = F'<iframe src="https://docs.google.com/document/d/e/2PACX-1vT66rJLgxpupEcVXS3Tw10CnXUihvxlJjFa-oCGaSYsoavIyYwIiRlulaV88OtloEZtnkmRlkOhIHQu/pub?embedded=true" width="700" height="1000" type="application/pdf"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
+    
+    with e3:
+        with open("Manual/RBFsim User Manual_03.09.2022.pdf", "rb") as pdf_file:
+            PDFbyte = pdf_file.read()
+
+        st.download_button(label="Download Literature Manual",
+                    data=PDFbyte,
+                    file_name="RBFSim-Literature-Manual.pdf",
+                    mime='application/octet-stream')
+
         

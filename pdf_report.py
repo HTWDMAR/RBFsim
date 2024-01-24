@@ -5,6 +5,7 @@ class PDF(FPDF):
     proj_title = ''
 
     def header(self):
+        self.set_margins(10, 10, 10)
         self.image('./images/HTW_logo.jpeg', 5, 5, 0, 15)
         img_1 = Image.open('./images/FMER_logo.jpeg')
         original_width_1, original_height_1 = img_1.size
@@ -37,6 +38,7 @@ class PDF(FPDF):
         self.rotate(0)
         self.set_xy(original_x, original_y)
         self.set_margins(20, 10, 10)
+        self.set_auto_page_break(True, margin = 12)
 
     
     def footer(self):

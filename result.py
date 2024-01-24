@@ -36,13 +36,14 @@ def app():
 	#st.write("Using Previous Database Data")
 	#st.write(st.session_state.aq_ls)
 	if 'aq_ls' and 'we_ls' and 'cf_ls' in st.session_state :
-		df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value (m/day)', 'D Value (m)'])
+		print('session state:', st.session_state.we_ls)
+		df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value\n(m/day)', 'D Value\n(m)']).astype('O')
 		value_list_dfs = {}
 		modified_aq_ls = [[*inner[1:]] for inner in st.session_state.aq_ls]
-		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness (m)', 'Base Flow (m\u00B2/day)', 'Porosity', 'Hydraulic Conductivity (m/day)', 'Reference Head (m)'])
+		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Base Flow\n(m\u00B2/day)', 'Porosity', 'Hydraulic Conductivity\n(m/day)', 'Reference Head (m)']).astype('O')
 
 		value_list_dfs["Aquifier Data"] = aq_ls_df
-		we_ls_df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate (m\u00B3/day)', 'X-Coordinates (m)', 'Y-Coordinates (m)'])
+		we_ls_df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate\n(m\u00B3/day)', 'X-Coordinates\n(m)', 'Y-Coordinates\n(m)']).astype('O')
 		value_list_dfs["Well Data"] = we_ls_df
 		plots = {} 
 		bf_dict = None #initialize variable for bank filtrate calculation results
@@ -81,9 +82,10 @@ def app():
 				if len(results_clg) == 0:
 					st.info("No Clogging Factor is Added!")
 				else:
-					# modified_clg = [[*inner[1:]] for inner in results_clg]
-					cf_df = pd.DataFrame(results_clg, columns=['Layer ID', 'Hydraulic Condutivity of Layer (m/day)', 'Thickness of Layer (m)'])
-					value_list_dfs["Clogging Factor"] = cf_df
+					modified_clg = [[*inner[1:]] for inner in results_clg]
+					cf_df = pd.DataFrame(modified_clg, columns=['Condutivity\n(m/day)', 'Thickness\n(m)']).astype('O')
+					cf_df = cf_df.reindex(columns=['Thickness\n(m)', 'Condutivity\n(m/day)'])
+					value_list_dfs["Clogging Data"] = cf_df
 					aem_model.calc_clogging(results_clg[0][1], results_clg[0][2])
 			
 				if len(results) == 0:
@@ -178,7 +180,7 @@ def app():
 									value="{} m & {} m".format(riv_0_rounded, riv_1_rounded)
 								)
 
-								bf_dict = {'Bank Filtrate Portion (%)':f"{bf_ratio_rounded}", 'River Capture Length (m)':f"{riv_length_rounded}", 'Capture Length Location on Y-Axis (m)':f"{riv_0_rounded} & {riv_1_rounded}"}
+								bf_dict = {'Bank Filtrate Portion\n(%)':f"{bf_ratio_rounded}", 'River Capture Length\n(m)':f"{riv_length_rounded}", 'Capture Length Location on Y-Axis\n(m)':f"{riv_0_rounded} & {riv_1_rounded}"}
 					with c2:
 						st.write('')
 				
@@ -205,7 +207,7 @@ def app():
 							st.sidebar.metric(label=":blue[Average Travel Time:]", value="{} days".format(avg_tt_rounded))
 							st.sidebar.metric(label=":blue[Minimum Travel Time:]", value="{} days".format(min_tt_rounded))
 
-							tt_dict = {'Average Travel Time (days)':f'{avg_tt_rounded}', 'Minimum Travel Time (days)':f'{min_tt_rounded}'}
+							tt_dict = {'Average Travel Time\n(days)':f'{avg_tt_rounded}', 'Minimum Travel Time\n(days)':f'{min_tt_rounded}'}
 							st.markdown("---")
 
 					# ------------------------------------------------------------------------------Download Files----------------------------------------------------------------------------------------
@@ -251,76 +253,120 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict):
 	pdf.proj_title = title
 	pdf.add_page(format='A4')    
 	pdf.set_text_color(0, 51, 102)
-	pdf.set_font('Arial', 'I', 9)
-	pdf.cell(0, 8, f"Date:{date.today()}", align="R")
+	pdf.set_font('Arial', 'I', 10)
+	pdf.cell(0, 8, f"Date: {date.today()}", align="R")
 	pdf.set_text_color(0, 0, 0)
 	pdf.ln(10)
 		
 	for key, values_df in value_list_dfs.items():
 		pdf.set_font('Arial', 'B', 12)
 		pdf.set_text_color(0, 51, 102)
-		pdf.cell(0, 5, f"Input Data: {key}", ln = 2, align="L")
+		pdf.cell(0, 5, f"{key}", ln = 2, align="L")
 		pdf.set_text_color(0, 0, 0)
 		pdf.ln(1)
 		pdf.set_font('Arial', '', 10)
 		left_margin = pdf.l_margin
 		right_margin = pdf.r_margin
-		with pdf.table(line_height=7, width=pdf.w - left_margin - right_margin, align='L') as table:
+		with pdf.table(line_height=7, width=(pdf.w - left_margin - right_margin), align='L') as table:
 			headers = values_df.columns.tolist()
 			rows = values_df.values.tolist()
 			header_row = table.row()
 			for header in headers:
 				pdf.set_text_color(0, 51, 102)
-				header_row.cell(header)    
+				header_row.cell(header, align='C')    
 				pdf.set_text_color(0, 0, 0)        
 			for df_row in rows:
 				row = table.row()
 				for value in df_row:
-					row.cell(str(value))
+					row.cell(str(value), align='C')
 		pdf.ln(5)
 		#---formatting for displaying plot images---
 	row_count=0
 	
-	img_margin = 5
+	img_margin = 2
 	#---if even number of images then allow 2 images per row else allow upto 3---
-	if len(plots) == 1:
-		img_per_row = 1    
-		img_width = pdf.w / 1.75
-	elif len(plots) % 2 != 0:
-		row = len(plots) / 3
-		img_per_row = 3
-		img_width = (pdf.w - (left_margin+right_margin +(img_per_row - 1) * 5)) / img_per_row
-	else:
-		row = len(plots) // 2
-		img_per_row = 2
-		img_width = (pdf.w - (left_margin+right_margin +(img_per_row - 1) * 5)) / img_per_row
+	# if len(plots) == 1:
+	# 	img_per_row = 1    
+	# 	img_width = pdf.w / 1.75
+	# elif len(plots) % 2 != 0:
+	# 	row = len(plots) / 3
+	# 	img_per_row = 3
+	# 	img_width = (pdf.w - (left_margin+right_margin +(img_per_row - 1) * 5)) / img_per_row
+	# else:
+	# 	row = len(plots) // 2
+	# 	img_per_row = 2
+	# 	img_width = (pdf.w - (left_margin+right_margin +(img_per_row - 1) * 5)) / img_per_row
 		
+	# img_heights = [] 
+	# for label, plot in plots.items():
+	# 	img=Image.open(plot)
+	# 	w, h = img.size
+	# 	aspect_ratio = h / w
+	# 	img_height = img_width * aspect_ratio     
+		
+
+	# 	if row_count == img_per_row:
+	# 		row_count=0
+	# 		pdf.set_y(final_y+max(img_heights)+5)  
+	# 		img_heights.clear()
+			
+	# 	if row_count == 0 and (pdf.get_y() + img_height + 15) > pdf.h:
+	# 		pdf.add_page(format='A4')    
+	# 		# pdf.set_margins(20, 10, 10)
+	# 		# pdf.set_x(10)
+	# 		pdf.ln(5)
+			
+			
+
+			
+	# 	x = pdf.get_x()
+	# 	y = pdf.get_y()
+	# 	pdf.set_font('Arial', 'B', 10)
+	# 	pdf.cell(img_width, 10, f"{label}", ln=1, align='C')    
+	# 	final_y = pdf.get_y() 
+	# 	p_img = pdf.image(plot, x=x, y=final_y, w=img_width, h=img_height)
+	# 	img_heights.append(img_height)
+	# 	if label != list(plots.keys())[-1]:
+	# 		pdf.set_xy(x+img_width+5, y)   
+	# 	else:
+	# 		pdf.set_y(final_y+max(img_heights)+5)
+		
+	# 	row_count += 1
+	row_count = 0
 	img_heights = [] 
 	for label, plot in plots.items():
+		img_width = (pdf.w - (left_margin+right_margin +(1) * img_margin)) / 2
+		current_index = list(plots.keys()).index(label)
+		if label == 'Time Travel Plot':
+			img_width = (pdf.w - (left_margin+right_margin +(1) * img_margin)) / 1.75
+		elif current_index != len(plots.items())-1:
+			if current_index % 2 == 0 and list(plots.keys())[current_index + 1] == 'Time Travel Plot': #image on the same row left of ttplot
+				img_width = (pdf.w - (left_margin+right_margin +(1) * img_margin)) / 2.25
+		elif current_index != 0: 
+			if current_index % 2 != 0 and list(plots.keys())[current_index - 1] == 'Time Travel Plot': #image on the same row right to ttplot
+				img_width = (pdf.w - (left_margin+right_margin +(1) * img_margin)) / 2.25
+		else:
+			img_width = (pdf.w - (left_margin+right_margin +(1) * img_margin)) / 2
 		img=Image.open(plot)
 		w, h = img.size
 		aspect_ratio = h / w
-		img_height = img_width * aspect_ratio     
-		
+		img_height = img_width * aspect_ratio 
 
-		if row_count == img_per_row:
+		if row_count == 2:
 			row_count=0
 			pdf.set_y(final_y+max(img_heights)+5)  
 			img_heights.clear()
 			
-		if row_count == 0 and (pdf.get_y() + img_height + 15) > pdf.h:
+		if row_count == 0 and (pdf.get_y() + img_height + 12 + 10) > pdf.h:
 			pdf.add_page(format='A4')    
 			# pdf.set_margins(20, 10, 10)
 			# pdf.set_x(10)
 			pdf.ln(5)
 			
-			
-
-			
 		x = pdf.get_x()
 		y = pdf.get_y()
-		pdf.set_font('Arial', 'BU', 10)
-		pdf.cell(img_width, 10, f"Figure: {label}", ln=1, align='C')    
+		pdf.set_font('Arial', 'B', 10)
+		pdf.cell(img_width, 10, f"{label}", ln=1, align='C')    
 		final_y = pdf.get_y() 
 		p_img = pdf.image(plot, x=x, y=final_y, w=img_width, h=img_height)
 		img_heights.append(img_height)
@@ -340,15 +386,15 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict):
 		pdf.set_font('Arial', '', 10)
 		headers = bf_dict.keys()
 		rows = bf_dict.values()
-		with pdf.table(line_height=7, width=pdf.w/1.5, align='L') as table:
+		with pdf.table(line_height=7, width=(pdf.w - left_margin - right_margin), align='L') as table:
 			header_row = table.row()
 			row = table.row()
 			for header in headers:
 				pdf.set_text_color(0, 51, 102)
-				header_row.cell(header)    
+				header_row.cell(header, align='C')    
 				pdf.set_text_color(0, 0, 0)    
 			for value in rows:
-				row.cell(str(value))
+				row.cell(str(value), align='C')
 			
 		pdf.ln(5)
 	if tt_dict is not None:
@@ -360,15 +406,15 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict):
 		pdf.set_font('Arial', '', 10)
 		headers = tt_dict.keys()
 		rows = tt_dict.values()
-		with pdf.table(line_height=7, width=pdf.w/2, align='L') as table:
+		with pdf.table(line_height=7, width=(pdf.w - left_margin - right_margin), align='L') as table:
 			header_row = table.row()
 			row = table.row()
 			for header in headers:
 				pdf.set_text_color(0, 51, 102)
-				header_row.cell(header)    
+				header_row.cell(header, align='C')    
 				pdf.set_text_color(0, 0, 0)    
 			for value in rows:
-				row.cell(str(value))
+				row.cell(str(value), align='C')
 			
 			
 		pdf.ln(5)
