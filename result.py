@@ -23,33 +23,37 @@ from plot import *
 from pdf_report import PDF
 from datetime import date
 
+domainsize = 500
+
 def app():
 	st.sidebar.divider()
 	st.title(":red[Results and visualizations]")
 	
 	view_plots, report = st.tabs(["**View Results**", "**Download Report**"])
-	if 'aq_ls' and 'we_ls' and 'cf_ls' not in st.session_state:        
+	
+	if 'aq_ls' and 'we_ls' and 'cf_ls' not in st.session_state:
 		with view_plots:
-			st.subheader(":blue[Please Input Data for the simulation]")
+			st.subheader(":blue[Please Input Data for Simulation]")
+
 		with report:
-			st.subheader(":blue[Please Input Data for the simulation]")
-	#st.write("Using Previous Database Data")
-	#st.write(st.session_state.aq_ls)
+			st.subheader(":blue[Please Input Data for Simulation]")
+
+
 	if 'aq_ls' and 'we_ls' and 'cf_ls' in st.session_state :
-		print('session state:', st.session_state.we_ls)
-		df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value\n(m/day)', 'D Value\n(m)']).astype('O')
+		df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value \n(m/day)', 'D Value\n(m)'])
 		value_list_dfs = {}
 		modified_aq_ls = [[*inner[1:]] for inner in st.session_state.aq_ls]
-		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Base Flow\n(m\u00B2/day)', 'Porosity', 'Hydraulic Conductivity\n(m/day)', 'Reference Head (m)']).astype('O')
-
+		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Base Flow\n(m\u00B2/day)', 'Porosity', 'Hydraulic Conductivity\n(m/day)', 'Reference Head\n(m)']).astype('O')
 		value_list_dfs["Aquifier Data"] = aq_ls_df
-		we_ls_df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate\n(m\u00B3/day)', 'X-Coordinates\n(m)', 'Y-Coordinates\n(m)']).astype('O')
+		modified_we_ls_df = [[*inner[1:]] for inner in st.session_state.we_ls]
+		we_ls_df = pd.DataFrame(modified_we_ls_df, columns=['Pumping Rate\n(m\u00B3/day)', 'X-Coordinates\n(m)', 'Y-Coordinates\n(m)'])
 		value_list_dfs["Well Data"] = we_ls_df
 		plots = {} 
 		bf_dict = None #initialize variable for bank filtrate calculation results
 		tt_dict = None #initialize variable for time travel calculation results
 		#st.write("off we go now")
 		#st.write(len(st.session_state.aq_ls))
+
 		if len(st.session_state.aq_ls)==0 and len(st.session_state.we_ls) == 0 :
 			with view_plots:
 				st.subheader(":blue[Please Input required data for the simulation]")
@@ -76,18 +80,20 @@ def app():
 
 			# menu = ["Wells", "Rivers", "No Flow"]
 			# choice = st.sidebar.selectbox("Please Select Boundary Condition", menu)
-			aem_model = model_pro.Model(k=results_aq[0][4], H=results_aq[0][1], h0=results_aq[0][5], Qo_x=results_aq[0][2])
+			aem_model = model_pro.Model(k=results_aq[0][4], H=results_aq[0][1], h0=results_aq[0][5], Qo_x=results_aq[0][2]*results_aq[0][4]*(results_aq[0][2]*domainsize+results_aq[0][5]))
+			
 			################################## Check AEM Model
 			with view_plots:
+
 				if len(results_clg) == 0:
 					st.info("No Clogging Factor is Added!")
 				else:
 					modified_clg = [[*inner[1:]] for inner in results_clg]
 					cf_df = pd.DataFrame(modified_clg, columns=['Condutivity\n(m/day)', 'Thickness\n(m)']).astype('O')
 					cf_df = cf_df.reindex(columns=['Thickness\n(m)', 'Condutivity\n(m/day)'])
-					value_list_dfs["Clogging Data"] = cf_df
+					value_list_dfs["Clogging Factor"] = cf_df
 					aem_model.calc_clogging(results_clg[0][1], results_clg[0][2])
-			
+				
 				if len(results) == 0:
 					st.error("Please add at least one Well")
 				else:
@@ -95,33 +101,40 @@ def app():
 						if j == len(results):
 							for i in range(j):
 								well = model_pro.Well(aem_model, Q=results[i][1], rw=0.2, x=results[i][2], y=results[i][3])
-			
+				
 					c1, c2 = st.columns(2)
-
-				# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
+					
+					
+					# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
 					c1, c2 = st.columns(2)
-
-				# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
+					
+					wellhead = model_pro.Model.calc_head(aem_model, results[0][2]+0.3, results[0][3])
+					drawdown = (results_aq[0][2]*(results[0][2]+0.3)+results_aq[0][5]) - wellhead
+					drawdown = round(drawdown, 2)
+					st.sidebar.title(":red[Hydraulic Head Drawdown:]")
+					st.sidebar.metric(label=":blue[Drawdown:]", value="{} m".format(drawdown))
+					#or st.sidebar.write(f"{value_to_print")
+					# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
 					with c1:
 						if len(results)>(1):
 							st.subheader(":blue[Wells in Flow Field:]")
 						else:
 							st.subheader(":blue[Well in Flow Field:]")
-						plot1 = plotting(0, 100, -20, 150, 100)
+						plot1 = plotting(0, domainsize, -20, domainsize, 100)
 						b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))
 						plt.savefig(f'2D_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
 						plots["2D Plot"] = "./2D_plot.png"
 						st.pyplot(fig1)                        
-					
+						
 
 					with c2:
 						st.write('')
 						st.write('')
 						display_3d_plot = st.checkbox(":blue[Display 3D Plot]")
-					
-					
+						
+						
 
-					# Check if the checkbox is checked
+						# Check if the checkbox is checked
 						if display_3d_plot:
 							# Assuming `aem_model` is defined somewhere in your code
 							b2, fig2 = plot1.plot3d(aem_model)
@@ -130,30 +143,30 @@ def app():
 							st.pyplot(fig2)
 
 					st.divider()
-				
+					
 					c1,c2=st.columns(2)
 					solv = river_length(aem_model)
-						
+							
 					length, riv_coords, capture_fraction = solv.solve_river_length()
 					tt, ys, avgtt, mintt, traj_array = solv.time_travel(results_aq[0][3], delta_s=0.4, calculate_trajectory=True)
-				########### Changed here to modify capture length 
-				############### Removing Negative Values 
-					riv_coords = [max(0., x) for x in riv_coords]
-					length=sum(riv_coords)
+					########### Changed here to modify capture length 
+					############### Removing Negative Values 
+					# riv_coords = [max(0., x) for x in riv_coords]
+					# length=sum(riv_coords)
 					st.sidebar.title(":red[Contribution Portion:]")
 					with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
 						if len(results) > 1:
 							st.sidebar.markdown("---")
 							st.sidebar.info("After entering one well, The options will be available here.")
 						else:
-						
+							
 							if st.sidebar.checkbox("Bank Filtrate Portion"):
 								st.subheader(":blue[Bank Filterate Portion:]")
 								#---moved the following code block inside the if statement block
-							
+								
 								#moved code block ends---
 								#st.sidebar.markdown("---")
-								plot = plotting(0, 100, -20, 150, 100, riv_coords)
+								plot = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
 								b, fig = plot.plot2d(aem_model, sharey=False, traj_array=traj_array, levels=8, quiver=False, streams=True)
 								plt.savefig(f'Bank_filtrate_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
 								plots["Bank Filtrate Plot"]="./Bank_filtrate_plot.png"
@@ -161,7 +174,7 @@ def app():
 								bf_ratio = capture_fraction * 100
 								bf_ratio_rounded = int(bf_ratio)
 								st.sidebar.metric(label=":blue[Bank Filtrate Portion:]", value="{} %".format(bf_ratio_rounded))
-							
+								
 
 								riv_length_rounded = int(length)
 								st.sidebar.metric(label=":blue[River Capture Length:]", value="{} m".format(riv_length_rounded))
@@ -183,19 +196,19 @@ def app():
 								bf_dict = {'Bank Filtrate Portion\n(%)':f"{bf_ratio_rounded}", 'River Capture Length\n(m)':f"{riv_length_rounded}", 'Capture Length Location on Y-Axis\n(m)':f"{riv_0_rounded} & {riv_1_rounded}"}
 					with c2:
 						st.write('')
-				
+					
 
 
-				# ----------------------------------------------------------------------------Travel Time---------------------------------------------------------------------------
+					# ----------------------------------------------------------------------------Travel Time---------------------------------------------------------------------------
 					if len(results) > 1:
 						st.error(" ** Note: ** Enter Exactly One Well to get the solution for Bank Filtrate Portion, Capture Length and Time of Travel.")
 					else:
 						st.sidebar.markdown("---")
-						st.sidebar.title(":red[Time of Travel:]")
-						if st.sidebar.checkbox("Time of Travel"):
+						st.sidebar.title(":red[Travel time:]")
+						if st.sidebar.checkbox("Travel time"):
 							
-							st.subheader(":blue[Time of Travel:]")
-							plot2 = plotting(0, 100, -20, 150, 100, riv_coords)
+							st.subheader(":blue[Travel time:]")
+							plot2 = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
 							c, fig2 = plot2.plot2d(aem_model, tt=tt, ys=ys, traj_array=traj_array, levels=8, sharey=True, quiver=False, streams=True, figsize=(18, 12))
 							plt.savefig(f'Time_travel_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
 							plots["Time Travel Plot"] = "./Time_travel_plot.png"
@@ -211,7 +224,7 @@ def app():
 							st.markdown("---")
 
 					# ------------------------------------------------------------------------------Download Files----------------------------------------------------------------------------------------
-					plot3 = plotting(0, 100, -20, 150, 100)
+					plot3 = plotting(0, domainsize, -20, domainsize, 100)
 
 					
 
@@ -224,31 +237,30 @@ def app():
 					csv_psi = df_psi_rounded.to_csv(sep="\t", index=False)
 
 					# input_values_df = pd.concat(value_list_dfs, axis = 1)
-									
-					
-
+										
 				st.sidebar.markdown("---")
 				st.sidebar.title("Download \u03C8 & Head:")
 				st.sidebar.download_button(label="Download H in CSV", data=csv, mime="csv")
 				st.sidebar.download_button(label="Download \u03C8 in CSV", data=csv_psi, mime="csv")
 
+				st.sidebar.markdown("---")
+			
 			with report:
 				st.header("Export Simulation Report to PDF")
 				report_title = st.text_input("Enter Report Title:", max_chars=50)
 				report_download = st.button(label="Export Report to PDF")
 				if report_download:                  
 					if report_title:
-						download_report(report_title, value_list_dfs, plots, bf_dict, tt_dict)
+						download_report(report_title, value_list_dfs, plots, bf_dict, tt_dict, drawdown)
 					else:
-						download_report("RBF-Sim", value_list_dfs, plots, bf_dict, tt_dict)
-							
+						download_report("RBF-Sim", value_list_dfs, plots, bf_dict, tt_dict, drawdown)
 				
-	
+
 def create_download_link(val, filename):
 	b64 = base64.b64encode(val)  # val looks like b'...'
 	return f'<a href="data:application/octet-stream;base64,{b64.decode()}" download="{filename}.pdf">Download PDF</a>'
 
-def download_report(title, value_list_dfs, plots, bf_dict, tt_dict):
+def download_report(title, value_list_dfs, plots, bf_dict, tt_dict, drawdown):
 	pdf=PDF('P', 'mm')
 	pdf.proj_title = title
 	pdf.add_page(format='A4')    
@@ -377,6 +389,20 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict):
 		
 		row_count += 1
 	pdf.ln(5)
+	
+	pdf.set_font('Arial', 'B', 12)
+	pdf.set_text_color(0, 51, 102)
+	pdf.cell(50, 5, "Hydraulic Head Drawdown", ln = 2)
+	pdf.set_font('Arial', '', 10)
+	with pdf.table(line_height=7, width=(pdf.w - left_margin - right_margin), align='L') as table:
+		header_row = table.row()
+		row = table.row()
+		pdf.set_text_color(0, 51, 102)
+		header_row.cell("Drawdown\n(m)", align='C')    
+		pdf.set_text_color(0, 0, 0)  
+		row.cell(str(drawdown), align='C')
+		pdf.ln(5)
+
 	if bf_dict is not None:
 		pdf.set_font('Arial', 'B', 12)
 		pdf.set_text_color(0, 51, 102)

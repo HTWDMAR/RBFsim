@@ -161,7 +161,7 @@ class river_length(): #Class to calculate river capture length, location and cap
                     yss.append(y1)
 
             #Adding time of travel estimate
-            tt.append(np.nansum(np.array(t_arr)))
+            tt.append(np.sum(np.array(t_arr)))
 
             #Saving the particle trajectory in a numpy array
             if calculate_trajectory:
