@@ -43,7 +43,7 @@ def app():
 
 		t1, t2,t3 = st.columns([1.75,0.25, 1.25])
 		with t1:
-			st.title(":blue[Estimate Distance:]")
+			st.subheader(":blue[Estimate Distance:]")
 			alpha_value = st.number_input("Enter Desired Contribution Ratio \u03B1:", 0.010)
 			beta_value = np.interp(alpha_value, x, y)
 			beta = beta_value
@@ -57,8 +57,8 @@ def app():
 		with t2:
                         st.write('')
 		with t3:
-			st.title(":blue[Equation:]")
-			st.markdown("")
+			st.subheader(":blue[Equation:]")
+			st.markdown("***(From Holzbecher, 2013)***")
 			st.markdown("")
 			st.markdown("")
 			st.latex(r'''
@@ -82,7 +82,7 @@ def app():
 
 		t1,t2,t3 = st.columns([1.75,0.25, 1.25])
 		with t1:
-			st.title(":blue[Estimate Baseflow:]")
+			st.subheader(":blue[Estimate Baseflow:]")
 			alpha_value = st.number_input("Enter Desired Contribution Ratio \u03B1:", 0.011)
 			beta_value = np.interp(alpha_value, x, y)
 			beta = beta_value
@@ -95,7 +95,7 @@ def app():
                                 st.markdown(""" ### Base Flow in X-Direction = {} m\u00B2/day """.format(Qx_beta_1_int))
 
 		with t3:
-			st.title(":blue[Equation:]")
+			st.subheader(":blue[Equation:]")
 			st.markdown("")
 			st.markdown("")
 			st.markdown("")
@@ -119,7 +119,7 @@ def app():
 
 		t1,t2,t3 = st.columns([1.75,0.25, 1.25])
 		with t1:
-			st.title(":blue[Estimate Well Q:]")
+			st.subheader(":blue[Estimate Well Q:]")
 			alpha_value = st.number_input("Enter Desired Contribution Ratio \u03B1:", 0.012)
 			beta_value = np.interp(alpha_value, x, y)
 			beta = beta_value
@@ -131,7 +131,7 @@ def app():
 			if Q_button:
 				st.markdown(""" ### Well Discharge = {} m\u00B3/day """.format(Q_beta_1_int))
 		with t3:
-			st.title(":blue[Equation:]")
+			st.subheader(":blue[Equation:]")
 			st.markdown("")
 			st.markdown("")
 			st.markdown("")
