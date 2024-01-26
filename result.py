@@ -40,12 +40,13 @@ def app():
 
 
 	if 'aq_ls' and 'we_ls' and 'cf_ls' in st.session_state :
-		df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value (m/day)', 'D Value (m)'])
+		df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value \n(m/day)', 'D Value\n(m)'])
 		value_list_dfs = {}
 		modified_aq_ls = [[*inner[1:]] for inner in st.session_state.aq_ls]
-		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Base Flow\n(m\u00B2/day)', 'Porosity', 'Hydraulic Conductivity\n(m/day)', 'Reference Head (m)']).astype('O')
+		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Base Flow\n(m\u00B2/day)', 'Porosity', 'Hydraulic Conductivity\n(m/day)', 'Reference Head\n(m)']).astype('O')
 		value_list_dfs["Aquifier Data"] = aq_ls_df
-		we_ls_df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID (n)', 'Pumping Rate (m\u00B3/day)', 'X-Coordinates (m)', 'Y-Coordinates (m)'])
+		modified_we_ls_df = [[*inner[1:]] for inner in st.session_state.we_ls]
+		we_ls_df = pd.DataFrame(modified_we_ls_df, columns=['Pumping Rate\n(m\u00B3/day)', 'X-Coordinates\n(m)', 'Y-Coordinates\n(m)'])
 		value_list_dfs["Well Data"] = we_ls_df
 		plots = {} 
 		bf_dict = None #initialize variable for bank filtrate calculation results
