@@ -52,7 +52,7 @@ class plotting: #Class to assist plotting of the results
         #plt.xlabel('x [m]', fontsize=15)
         #plt.ylabel('y [m]', fontsize=15)
         cbar = fig.colorbar(contour, ax=ax[1]) #, shrink=0.9
-        cbar.set_label('Hydraulic Head (m)', fontsize=25, labelpad=-120)  # Add this line
+        cbar.set_label('Head (m)', fontsize=25, labelpad=-120)  # Add this line
         cbar.ax.tick_params(labelsize=25)
 
         if not (quiver) and not (streams) and (traj_array==None):
@@ -92,7 +92,7 @@ class plotting: #Class to assist plotting of the results
         ax.zaxis.set_major_formatter(StrMethodFormatter('{x:,.4f}'))  # Corrected format specifier
         ax.set_xlabel('Length of domain (m)', fontsize=25, labelpad=25)  # Increase font size and labelpad
         ax.set_ylabel('River stretch (m)', fontsize=25, labelpad=28)  # Increase font size and labelpad
-        ax.set_zlabel('Hydraulic Head (m)', fontsize=25, labelpad=5)  # Increase font size and labelpad
+        ax.set_zlabel('Head (m)', fontsize=25, labelpad=5)  # Increase font size and labelpad
         colorbar = fig.colorbar(surf, shrink=0.5, ax=ax, location="right")
         colorbar.ax.tick_params(labelsize=25)  # Set the font size for colorbar labels
 
