@@ -253,7 +253,7 @@ def app():
 					if report_title:
 						download_report(report_title, value_list_dfs, plots, bf_dict, tt_dict, drawdown)
 					else:
-						download_report("RBF-Sim", value_list_dfs, plots, bf_dict, tt_dict, drawdown)
+						download_report("RBFsim", value_list_dfs, plots, bf_dict, tt_dict, drawdown)
 				
 
 def create_download_link(val, filename):
