@@ -6,7 +6,7 @@ from PIL import Image
 def app():
     st.title(":red[Help Page]")
     #st.divider()
-    e1, e2, e3 = st.tabs(["**Software Manual**", "**Literature Manual**", "**Download Literature Manual**"])
+    e1, e2, e3 = st.tabs(["**Software Manual**", "**Manual**", "**Download  manual**"])
     with e1:
         
         st.subheader(":blue[How to use the software]")
