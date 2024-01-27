@@ -5,7 +5,7 @@ import home, result, help_page, data_col, new_help # import your app modules her
 
 
 st.set_page_config(
-    layout="centered", page_title="RBF Sim", page_icon="♨"
+    layout="centered", page_title="RBFsim", page_icon="♨"
 )
 
 
