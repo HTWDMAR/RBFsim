@@ -91,6 +91,7 @@ Following authors are credited for this version [![DOI](https://zenodo.org/badge
 7. Prof. Dr. T. Grischek - Supervisory support on contents
 8. Vibhu Batheja - GUI, Deployment and Verification
 9. Anton Kohler - Model Verification
+10. Pratistha Kansakar - Report creation and optimization
 
 
 
