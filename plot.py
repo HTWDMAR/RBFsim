@@ -43,8 +43,8 @@ class plotting: #Class to assist plotting of the results
 
         fig, ax = plt.subplots(1,2, figsize = figsize, sharey = sharey, gridspec_kw={'width_ratios': [1, 3.5]})
         contour = plt.contourf(self.mesh()[0], self.mesh()[1], h, levels, cmap = cm.YlGnBu, alpha=alpha)
-        ax[1].set_xlabel('Length of Domain (m)', fontsize=25,labelpad=15)
-        ax[1].set_ylabel('Width of Domain (m)', fontsize=25,labelpad=15)
+        ax[1].set_xlabel('Length of domain (m)', fontsize=25,labelpad=15)
+        ax[1].set_ylabel('River stretch (m)', fontsize=25,labelpad=15)
         ax[1].tick_params(axis='both', which='major', labelsize=25)
         ax[1].tick_params(axis='both', which='minor', labelsize=25)
         
@@ -77,7 +77,7 @@ class plotting: #Class to assist plotting of the results
         if tt is not None: #Travel time plot
             ax[0].plot(tt, ys, '--o', color='#0592D0', markersize=5)
             ax[0].set_xlabel('Travel time - (d)', fontsize=25)
-            ax[0].set_ylabel('Domain Width (m)', fontsize=25)
+            ax[0].set_ylabel('River stretch (m)', fontsize=25)
             ax[0].grid(alpha=0.2)
 
         else:
@@ -90,8 +90,8 @@ class plotting: #Class to assist plotting of the results
         fig, ax = plt.subplots(figsize=(15, 20), subplot_kw={'projection': "3d"})
         surf = ax.plot_surface(self.mesh()[0], self.mesh()[1], self.fix_to_mesh(model)[0], cmap=cm.coolwarm_r, linewidth=0, antialiased=True)
         ax.zaxis.set_major_formatter(StrMethodFormatter('{x:,.4f}'))  # Corrected format specifier
-        ax.set_xlabel('Length of Domain (m)', fontsize=25, labelpad=25)  # Increase font size and labelpad
-        ax.set_ylabel('Width of Domain (m)', fontsize=25, labelpad=28)  # Increase font size and labelpad
+        ax.set_xlabel('Length of domain (m)', fontsize=25, labelpad=25)  # Increase font size and labelpad
+        ax.set_ylabel('River stretch (m)', fontsize=25, labelpad=28)  # Increase font size and labelpad
         ax.set_zlabel('Hydraulic Head (m)', fontsize=25, labelpad=5)  # Increase font size and labelpad
         colorbar = fig.colorbar(surf, shrink=0.5, ax=ax, location="right")
         colorbar.ax.tick_params(labelsize=25)  # Set the font size for colorbar labels
