@@ -111,7 +111,7 @@ def app():
                         #new_aq_id = st.number_input("Aquifer ID:", aq_id)
                         new_aq_id=1
                         new_thk_aq = st.number_input("Thickness of the Aquifer (m):",1.,200., float(thk_aq))
-                        new_Gradient = st.number_input("Natural Hydraulic Head Gradient (‰):",0.,10., float(Gradient)*1000, 1.)
+                        new_Gradient = st.number_input("Hydraulic Head Gradient (‰):",0.,10., float(Gradient)*1000, 1.)
                         new_Gradient = new_Gradient/1000
                         #new_baseflow = st.number_input("Base Flow (m\u00B2/day):",0.,1000., float(baseflow))
                     with col2:
