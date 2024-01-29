@@ -54,17 +54,15 @@ def app():
 		#st.write("off we go now")
 		#st.write(len(st.session_state.aq_ls))
 
-		if len(st.session_state.aq_ls)==0 and len(st.session_state.we_ls) == 0 :
+		if len(st.session_state.aq_ls) == 0 or len(st.session_state.we_ls) == 0 :
 			with view_plots:
 				st.subheader(":blue[Please Input required data for the simulation]")
 			with report:
 				st.subheader(":blue[Please Input required data for the simulation]")
-		if len(st.session_state.aq_ls) and (st.session_state.we_ls) !=0 :
+		if len(st.session_state.aq_ls) != 0 and len(st.session_state.we_ls) !=0 :
 			results_aq = st.session_state.aq_ls
 			results = st.session_state.we_ls
-			results_clg = st.session_state.cf_ls
-
-			
+			results_clg = st.session_state.cf_ls	
 
 			
 			#with st.expander("View All Data"):
@@ -94,150 +92,140 @@ def app():
 					value_list_dfs["Clogging Factor"] = cf_df
 					aem_model.calc_clogging(results_clg[0][1], results_clg[0][2])
 				
-				if len(results) == 0:
-					st.error("Please add at least one Well")
-				else:
-					for j in range(6):
-						if j == len(results):
-							for i in range(j):
-								well = model_pro.Well(aem_model, Q=results[i][1], rw=0.2, x=results[i][2], y=results[i][3])
+
+				for j in range(6):
+					if j == len(results):
+						for i in range(j):
+							well = model_pro.Well(aem_model, Q=results[i][1], rw=0.2, x=results[i][2], y=results[i][3])
+			
+				c1, c2 = st.columns(2)
 				
-					c1, c2 = st.columns(2)
-					
-					
-					# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
-					c1, c2 = st.columns(2)
-					
-					wellhead = model_pro.Model.calc_head(aem_model, results[0][2]+0.3, results[0][3])
-					drawdown = (results_aq[0][2]*(results[0][2]+0.3)+results_aq[0][5]) - wellhead
-					drawdown = round(drawdown, 2)
-					st.sidebar.title(":red[Hydraulic Head Drawdown:]")
-					st.sidebar.metric(label=":blue[Drawdown:]", value="{} m".format(drawdown))
-					#or st.sidebar.write(f"{value_to_print")
-					# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
-					with c1:
-						if len(results)>(1):
-							st.subheader(":blue[Wells in Flow Field:]")
-						else:
-							st.subheader(":blue[Well in Flow Field:]")
-						plot1 = plotting(0, domainsize, -20, domainsize, 100)
-						b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))
-						plt.savefig(f'2D_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
-						plots["2D Plot"] = "./2D_plot.png"
-						st.pyplot(fig1)                        
-						
-
-					with c2:
-						st.write('')
-						st.write('')
-						display_3d_plot = st.checkbox(":blue[Display 3D Plot]")
-						
-						
-
-						# Check if the checkbox is checked
-						if display_3d_plot:
-							# Assuming `aem_model` is defined somewhere in your code
-							b2, fig2 = plot1.plot3d(aem_model)
-							plt.savefig(f'3D_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
-							plots["3d Plot"]="./3D_plot.png"
-							st.pyplot(fig2)
-
-					st.divider()
-					
-					c1,c2=st.columns(2)
-					solv = river_length(aem_model)
-							
-					length, riv_coords, capture_fraction = solv.solve_river_length()
-					tt, ys, avgtt, mintt, traj_array = solv.time_travel(results_aq[0][3], delta_s=0.4, calculate_trajectory=True)
-					########### Changed here to modify capture length 
-					############### Removing Negative Values 
-					# riv_coords = [max(0., x) for x in riv_coords]
-					# length=sum(riv_coords)
-					st.sidebar.title(":red[Contribution Portion:]")
-					with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
-						if len(results) > 1:
-							st.sidebar.markdown("---")
-							st.sidebar.info("After entering one well, The options will be available here.")
-						else:
-							
-							if st.sidebar.checkbox("Bank Filtrate Portion"):
-								st.subheader(":blue[Bank Filterate Portion:]")
-								#---moved the following code block inside the if statement block
-								
-								#moved code block ends---
-								#st.sidebar.markdown("---")
-								plot = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
-								b, fig = plot.plot2d(aem_model, sharey=False, traj_array=traj_array, levels=8, quiver=False, streams=True)
-								plt.savefig(f'Bank_filtrate_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
-								plots["Bank Filtrate Plot"]="./Bank_filtrate_plot.png"
-								st.pyplot(fig)
-								bf_ratio = capture_fraction * 100
-								bf_ratio_rounded = int(bf_ratio)
-								st.sidebar.metric(label=":blue[Bank Filtrate Portion:]", value="{} %".format(bf_ratio_rounded))
-								
-
-								riv_length_rounded = int(length)
-								st.sidebar.metric(label=":blue[River Capture Length:]", value="{} m".format(riv_length_rounded))
-
-
-								riv_0 = riv_coords[0]
-								riv_1 = riv_coords[1]
-								if riv_0 != 0:
-									riv_0_rounded = riv_0.round(decimals=0)
-								else:
-									riv_0_rounded = int(riv_0)
-								riv_1_rounded = int(riv_1)
-
-								st.sidebar.metric(
-									label=":blue[Capture Length Location on Y-Axis:]",
-									value="{} m & {} m".format(riv_0_rounded, riv_1_rounded)
-								)
-
-								bf_dict = {'Bank Filtrate Portion\n(%)':f"{bf_ratio_rounded}", 'River Capture Length\n(m)':f"{riv_length_rounded}", 'Capture Length Location on Y-Axis\n(m)':f"{riv_0_rounded} & {riv_1_rounded}"}
-					with c2:
-						st.write('')
-					
-
-
-					# ----------------------------------------------------------------------------Travel Time---------------------------------------------------------------------------
-					if len(results) > 1:
-						st.error(" ** Note: ** Enter Exactly One Well to get the solution for Bank Filtrate Portion, Capture Length and Time of Travel.")
+				
+				# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
+				c1, c2 = st.columns(2)
+				
+				wellhead = model_pro.Model.calc_head(aem_model, results[0][2]+0.3, results[0][3])
+				drawdown = (results_aq[0][2]*(results[0][2]+0.3)+results_aq[0][5]) - wellhead
+				drawdown = round(drawdown, 2)
+				st.sidebar.title(":red[Hydraulic Head Drawdown:]")
+				st.sidebar.metric(label=":blue[Drawdown:]", value="{} m".format(drawdown))
+				#or st.sidebar.write(f"{value_to_print")
+				# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
+				with c1:
+					if len(results)>(1):
+						st.subheader(":blue[Wells in Flow Field:]")
 					else:
-						st.sidebar.markdown("---")
-						st.sidebar.title(":red[Travel time:]")
-						if st.sidebar.checkbox("Travel time"):
-							
-							st.subheader(":blue[Travel time:]")
-							plot2 = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
-							c, fig2 = plot2.plot2d(aem_model, tt=tt, ys=ys, traj_array=traj_array, levels=8, sharey=True, quiver=False, streams=True, figsize=(18, 12))
-							plt.savefig(f'Time_travel_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
-							plots["Time Travel Plot"] = "./Time_travel_plot.png"
-							st.pyplot(fig2)
-
-							avg_tt_rounded = int(avgtt)
-							min_tt_rounded = int(mintt)
-
-							st.sidebar.metric(label=":blue[Average Travel Time:]", value="{} days".format(avg_tt_rounded))
-							st.sidebar.metric(label=":blue[Minimum Travel Time:]", value="{} days".format(min_tt_rounded))
-
-							tt_dict = {'Average Travel Time\n(days)':f'{avg_tt_rounded}', 'Minimum Travel Time\n(days)':f'{min_tt_rounded}'}
-							st.markdown("---")
-
-					# ------------------------------------------------------------------------------Download Files----------------------------------------------------------------------------------------
-					plot3 = plotting(0, domainsize, -20, domainsize, 100)
-
+						st.subheader(":blue[Well in Flow Field:]")
+					plot1 = plotting(0, domainsize, -20, domainsize, 100)
+					b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))
+					plt.savefig(f'2D_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
+					plots["2D Plot"] = "./2D_plot.png"
+					st.pyplot(fig1)                        
 					
 
-					h0, psi0 = plot3.fix_to_mesh(aem_model)
-					dfh = pd.DataFrame(data=h0)
-					df_psi = pd.DataFrame(data=psi0)
-					dfh_rounded = dfh.round(decimals=3)
-					df_psi_rounded = df_psi.round(decimals=3)
-					csv = dfh_rounded.to_csv(sep="\t", index=False)
-					csv_psi = df_psi_rounded.to_csv(sep="\t", index=False)
+				with c2:
+					st.write('')
+					st.write('')
+					display_3d_plot = st.checkbox(":blue[Display 3D Plot]")
+					
+					
 
-					# input_values_df = pd.concat(value_list_dfs, axis = 1)
-										
+					# Check if the checkbox is checked
+					if display_3d_plot:
+						# Assuming `aem_model` is defined somewhere in your code
+						b2, fig2 = plot1.plot3d(aem_model)
+						plt.savefig(f'3D_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
+						plots["3d Plot"]="./3D_plot.png"
+						st.pyplot(fig2)
+
+				st.divider()
+				
+				c1,c2=st.columns(2)
+									
+				with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
+					if len(results) > 1:
+						st.sidebar.markdown("---")
+						st.sidebar.info("After entering one well, The options will be available here.")
+					else:
+						solv = river_length(aem_model)
+						
+						length, riv_coords, capture_fraction = solv.solve_river_length()
+						tt, ys, avgtt, mintt, traj_array = solv.time_travel(results_aq[0][3], delta_s=0.4, calculate_trajectory=True)
+						st.sidebar.title(":red[Contribution Portion:]")
+						if st.sidebar.checkbox("Bank Filtrate Portion"):
+							st.subheader(":blue[Bank Filterate Portion:]")
+							plot = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
+							b, fig = plot.plot2d(aem_model, sharey=False, traj_array=traj_array, levels=8, quiver=False, streams=True)
+							plt.savefig(f'Bank_filtrate_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
+							plots["Bank Filtrate Plot"]="./Bank_filtrate_plot.png"
+							st.pyplot(fig)
+							bf_ratio = capture_fraction * 100
+							bf_ratio_rounded = int(bf_ratio)
+							st.sidebar.metric(label=":blue[Bank Filtrate Portion:]", value="{} %".format(bf_ratio_rounded))
+							
+
+							riv_length_rounded = int(length)
+							st.sidebar.metric(label=":blue[River Capture Length:]", value="{} m".format(riv_length_rounded))
+
+
+							riv_0 = riv_coords[0]
+							riv_1 = riv_coords[1]
+							if riv_0 != 0:
+								riv_0_rounded = riv_0.round(decimals=0)
+							else:
+								riv_0_rounded = int(riv_0)
+							riv_1_rounded = int(riv_1)
+
+							st.sidebar.metric(
+								label=":blue[Capture Length Location on Y-Axis:]",
+								value="{} m & {} m".format(riv_0_rounded, riv_1_rounded)
+							)
+
+							bf_dict = {'Bank Filtrate Portion\n(%)':f"{bf_ratio_rounded}", 'River Capture Length\n(m)':f"{riv_length_rounded}", 'Capture Length Location on Y-Axis\n(m)':f"{riv_0_rounded} & {riv_1_rounded}"}
+				with c2:
+					st.write('')
+				
+
+
+				# ----------------------------------------------------------------------------Travel Time---------------------------------------------------------------------------
+				if len(results) > 1:
+					st.error(" ** Note: ** Enter Exactly One Well to get the solution for Bank Filtrate Portion, Capture Length and Time of Travel.")
+				else:
+					st.sidebar.markdown("---")
+					st.sidebar.title(":red[Travel time:]")
+					if st.sidebar.checkbox("Travel time"):
+						
+						st.subheader(":blue[Travel time:]")
+						plot2 = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
+						c, fig2 = plot2.plot2d(aem_model, tt=tt, ys=ys, traj_array=traj_array, levels=8, sharey=True, quiver=False, streams=True, figsize=(18, 12))
+						plt.savefig(f'Time_travel_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
+						plots["Time Travel Plot"] = "./Time_travel_plot.png"
+						st.pyplot(fig2)
+
+						avg_tt_rounded = int(avgtt)
+						min_tt_rounded = int(mintt)
+
+						st.sidebar.metric(label=":blue[Average Travel Time:]", value="{} days".format(avg_tt_rounded))
+						st.sidebar.metric(label=":blue[Minimum Travel Time:]", value="{} days".format(min_tt_rounded))
+
+						tt_dict = {'Average Travel Time\n(days)':f'{avg_tt_rounded}', 'Minimum Travel Time\n(days)':f'{min_tt_rounded}'}
+						st.markdown("---")
+
+				# ------------------------------------------------------------------------------Download Files----------------------------------------------------------------------------------------
+				plot3 = plotting(0, domainsize, -20, domainsize, 100)
+
+				
+
+				h0, psi0 = plot3.fix_to_mesh(aem_model)
+				dfh = pd.DataFrame(data=h0)
+				df_psi = pd.DataFrame(data=psi0)
+				dfh_rounded = dfh.round(decimals=3)
+				df_psi_rounded = df_psi.round(decimals=3)
+				csv = dfh_rounded.to_csv(sep="\t", index=False)
+				csv_psi = df_psi_rounded.to_csv(sep="\t", index=False)
+
+				# input_values_df = pd.concat(value_list_dfs, axis = 1)
+									
 				st.sidebar.markdown("---")
 				st.sidebar.title("Download \u03C8 & Head:")
 				st.sidebar.download_button(label="Download H in CSV", data=csv, mime="csv")
