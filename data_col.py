@@ -478,4 +478,4 @@ def app():
             st.download_button(label=f'Download {format_option}', data=data, file_name=file_name, key='merged_data', mime=mime_type)
 
             # Display the merged dataframe
-            st.dataframe(merged_df)
+            # st.dataframe(merged_df)
