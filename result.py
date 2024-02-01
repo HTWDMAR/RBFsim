@@ -40,11 +40,10 @@ def app():
 
 
 	if 'aq_ls' and 'we_ls' and 'cf_ls' in st.session_state :
-		df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value \n(m/day)', 'D Value\n(m)'])
 		value_list_dfs = {}
 		modified_aq_ls = [[*inner[1:]] for inner in st.session_state.aq_ls]
-		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Base Flow\n(m\u00B2/day)', 'Porosity', 'Hydraulic Conductivity\n(m/day)', 'Reference Head\n(m)']).astype('O')
-		value_list_dfs["Aquifier Data"] = aq_ls_df
+		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Hydraulic Gradient\n(\u2030)', 'Porosity', 'Hydraulic Conductivity\n(m/day)', 'River Stage\n(m)']).astype('O')
+		value_list_dfs["Aquifer Data"] = aq_ls_df
 		modified_we_ls_df = [[*inner[1:]] for inner in st.session_state.we_ls]
 		we_ls_df = pd.DataFrame(modified_we_ls_df, columns=['Pumping Rate\n(m\u00B3/day)', 'X-Coordinates\n(m)', 'Y-Coordinates\n(m)'])
 		value_list_dfs["Well Data"] = we_ls_df
@@ -64,10 +63,7 @@ def app():
 			results = st.session_state.we_ls
 			results_clg = st.session_state.cf_ls	
 
-			
-			#with st.expander("View All Data"):
-				#df_clg = pd.DataFrame(results_clg, columns=['Layer ID', 'K Value', 'D Value'])
-				#st.dataframe(df_clg)
+
 			
 			# st.sidebar.markdown('---')
 			# st.sidebar.markdown(""" **Stored Values:** """)
@@ -251,7 +247,11 @@ def create_download_link(val, filename):
 def download_report(title, value_list_dfs, plots, bf_dict, tt_dict, drawdown):
 	pdf=PDF('P', 'mm')
 	pdf.proj_title = title
-	pdf.add_page(format='A4')    
+	pdf.add_page(format='A4') 
+	pdf.add_font('DejaVu', '', 'fonts/DejaVuSansCondensed.ttf', uni=True)  
+	pdf.add_font('DejaVu', 'B', 'fonts/DejaVuSansCondensed-Bold.ttf', uni=True)  
+	pdf.add_font('DejaVu', 'BI', 'fonts/DejaVuSansCondensed-BoldOblique.ttf', uni=True)  
+	pdf.add_font('DejaVu', 'I', 'fonts/DejaVuSansCondensed-Oblique.ttf', uni=True)  
 	pdf.set_text_color(0, 51, 102)
 	pdf.set_font('Arial', 'I', 10)
 	pdf.cell(0, 8, f"Date: {date.today()}", align="R")
@@ -271,10 +271,12 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict, drawdown):
 			headers = values_df.columns.tolist()
 			rows = values_df.values.tolist()
 			header_row = table.row()
+			pdf.set_font('DejaVu', '', 10)
 			for header in headers:
 				pdf.set_text_color(0, 51, 102)
 				header_row.cell(header, align='C')    
-				pdf.set_text_color(0, 0, 0)        
+				pdf.set_text_color(0, 0, 0)   
+			pdf.set_font('Arial', '', 10)     
 			for df_row in rows:
 				row = table.row()
 				for value in df_row:
