@@ -223,7 +223,7 @@ def app():
 				# input_values_df = pd.concat(value_list_dfs, axis = 1)
 									
 				st.sidebar.markdown("---")
-				st.sidebar.title("Download \u03C8 & Head:")
+				st.sidebar.title("Download Head & Stream Function(\u03C8):")
 				st.sidebar.download_button(label="Download H in CSV", data=csv, mime="csv")
 				st.sidebar.download_button(label="Download \u03C8 in CSV", data=csv_psi, mime="csv")
 
