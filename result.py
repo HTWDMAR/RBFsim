@@ -141,7 +141,7 @@ def app():
 				with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
 					if len(results) > 1:
 						st.sidebar.markdown("---")
-						st.sidebar.info("After entering one well, The options will be available here.")
+						st.sidebar.info("**Contribution ratio and travel time are only possible for a single well**")
 					else:
 						solv = river_length(aem_model)
 						
