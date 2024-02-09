@@ -53,7 +53,9 @@ def app():
             if st.button("Add Values for Aquifer"):
                 #add_data_aq(aq_id, thk_aq, baseflow, porosity, hyd_con, ref_head)   ########### Need to add st.session state out here if want to use new format
                 st.session_state.aq_ls.append([aq_id, thk_aq, Gradient, porosity, hyd_con, ref_head])
-                st.success("Values added Successfully")                
+                st.success("Values added Successfully")   
+                clear_plots()
+                st.rerun()             
 #-------------------------------------------------------------Read_aq-----------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------Update_aq--------------------------------------------------------------------------------------------------------------------                    
         elif choice_aq == "Update Data":
@@ -101,6 +103,7 @@ def app():
                         
                         st.session_state.aq_ls=j
                         st.success("Values added Successfully")
+                        clear_plots()
                         
                 with st.expander("Updated Data"):
                     df2_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity', 'River Stage'])
@@ -126,6 +129,8 @@ def app():
                     # st.session_state.aq_ls = [sublist for sublist in st.session_state.aq_ls if sublist[0] != selected_data_aq]
                     st.session_state.aq_ls = [] #clearing list because we only have one input data of aquifier
                     st.success("Aquifer Deleted Successfully")
+                    clear_plots()
+                    st.rerun()
 
                 #results3_aq = view_all_data_aq()
                 with st.expander("Current Data"):
@@ -148,52 +153,38 @@ def app():
                 if st.download_button(key="aquifer_download", label='Download Table', data=df_aq.to_csv(),mime='text/csv'):
                     st.success("Your File Successfully Downloaded")
         st.divider()
-        #st.session_state.aq_ls=aq_ls
 #---------------------------------------------------------------------Aquifer Finish-------------------------------------------------------------------------------------    
-    #st.session_state.aq_ls=aq_ls
-    
     
     
     with well_dc :
-        #st.write(st.session_state.aq_ls)
         col1, col2 = st.columns(2)
         with col1:
             st.subheader(':blue[Well]')
             
-    #if input_options == "Aquifer":
         with col2 :
             st.write('')
-            if len(st.session_state.we_ls)==0 :
-                menu_well = ["New Data","Update Data", "Delete Data"]
-                choice_well = st.selectbox("Select Action (Well)", menu_well)
-            if len(st.session_state.we_ls)!=0 :
-                menu_well = ["Update Data", "New Data","Delete Data"]
-                choice_well = st.selectbox("Select Action (Well)", menu_well)
+            menu_well = ["New Data","Update Data", "Delete Data"]
+            choice_well = st.selectbox("Select Action (Well)", menu_well)
         st.divider()
-
-
-
 
 #----------------------------------------------------------------------Create_Well----------------------------------------------------------------------------------------                   
         if choice_well == "New Data":
-            #st.header(""" **Please Enter the Required Values in Table:** """)
             st.subheader(":blue[Add Values]")
 
-            #Layout of the Main_Page
             col1, col2 = st.columns(2)
             with col1:
                 well_id = st.number_input("Well ID", 1, 10, 1)
-                #----------limit pump_rate input upto 50 for 2D and 3D plot runtime error-----------------
                 pump_rate = st.number_input("Pumping / Recharge Rate in (m³/day):", -5000., 5000., 1000., 1.,help='-ve Pumping, +ve Recharge')
-                #st.warning('Please keep the Pumping Rate < 50 to generate 3D plot.', icon="⚠️")
+
             with col2:
                 x_coo = st.number_input("X-Coordinate of Well (m)", 1, 199, 50)
                 y_coo = st.number_input("Y-Coordinate of Well (m)", 1, 399, 250)
 
             if st.button("Add Values for Well"):
                 st.session_state.we_ls.append([well_id, pump_rate, x_coo, y_coo])
-                st.success("Successfully Added Values for Well: {}".format(well_id))   
-#---------------------------------------------------------------------Read_Well-----------------------------------------------------------------------------------            
+                st.success("Successfully Added Values for Well: {}".format(well_id))
+                clear_plots()   
+
 #---------------------------------------------------------------------Update_Well--------------------------------------------------------------------------------
         elif choice_well == "Update Data":
             if len(st.session_state.we_ls)== 0 :
@@ -231,6 +222,7 @@ def app():
                         st.session_state.we_ls = [sublist for sublist in st.session_state.we_ls if sublist[0] != selected_data]
                         st.session_state.we_ls.append([new_well_id,new_pump_rate,new_x_coo,new_y_coo])
                         st.success("Successfully Updated :: {} To :: {}".format(well_id, new_well_id))
+                        clear_plots()
 
                 #results2 = view_all_data()
                 with st.expander("Updated Data"):
@@ -245,7 +237,6 @@ def app():
                 st.dataframe(df)
             if len(st.session_state.we_ls)!= 0 :
                 st.subheader("Delete Values")
-                #results = view_all_data()
                 with st.expander("Current Data"):
                     df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
                     st.dataframe(df)
@@ -254,19 +245,16 @@ def app():
                 selected_data = st.selectbox("Well ID to Delete", list_of_data)
                 st.warning("The Well ID {} will be Deleted".format(selected_data))
                 if st.button("Delete Values for Well"):
-                    #delete_id(selected_data)
                     st.session_state.we_ls = [sublist for sublist in st.session_state.we_ls if sublist[0] != selected_data]
                     st.success("Well ID is Deleted Successfully")
+                    clear_plots()
 
-            #results3 = view_all_data()
+
                 with st.expander("Current Data"):
                     df3 = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
                     st.dataframe(df3)
-        #st.subheader(":blue[View Values]")
-       # results = view_all_data()
+
         st.divider()
-            #st.write(results)
-        ############## Displaying Data
         col1, col2 = st.columns(2)
         with col1 :
             st.subheader(":blue[View All Data]")
@@ -275,12 +263,9 @@ def app():
             if st.checkbox("Display Current Well Data"):
                 df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
                 st.dataframe(df)
-                #df = pd.DataFrame(results, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
                 if st.download_button(key="well_download", label='Download Table', data=df.to_csv(),mime='text/csv'):
                     st.success("Your File was Successfully Downloaded")
         st.divider()
-        #st.session_state.we_ls=we_ls
-    #st.session_state.we_ls=we_ls
 #-----------------------------------------------------------------------------------Well Finish------------------------------------------------------------------------    
     with clo_dc :
         col1, col2 = st.columns(2)
@@ -308,6 +293,8 @@ def app():
             if st.button("Add Values for Clogging Factor"):
                 st.session_state.cf_ls.append([clg_id, kd, dc])
                 st.success("Colmation Layer {} Added".format(clg_id))
+                clear_plots()
+                st.rerun()
 
             #st.sidebar.info("In Progress")
 
@@ -347,6 +334,7 @@ def app():
                                 j.append([new_clg_id,new_kd,new_dc])
                                 st.session_state.cf_ls=j
                                 st.success("Successfully Updated!")
+                                clear_plots()
                                 #st.session_state.cf_ls = [sublist for sublist in st.session_state.cf_ls if sublist != selected_result_clg]
 
 
@@ -373,24 +361,19 @@ def app():
                             #delete_id_clg(selected_data_clg)
                             st.session_state.cf_ls = []
                             st.success("Layer ID is Deleted Successfully")
+                            clear_plots()
+                            st.rerun()
                             
-                #results_clg = view_all_data_clg()
         st.divider()
-                ##################### Displaying Data
         col1, col2 = st.columns(2)
         with col1 :
                 st.subheader(":blue[View All Data]")
         with col2:
                 st.write('')
                 if st.checkbox("Display Current Clogging Data"):
-                #with st.expander("View All Data"):
                     df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value'])
                     st.dataframe(df_clg)
         st.divider()
-                #st.session_state.cf_ls=cf_ls
-            #st.session_state.cf_ls=cf_ls
-
-        #st.sidebar.markdown("---")
 
     
 
@@ -479,3 +462,14 @@ def app():
 
             # Display the merged dataframe
             # st.dataframe(merged_df)
+
+def clear_plots():
+    # print("deleting plots from session state")
+    if '2d_plot' in st.session_state.keys():
+        del st.session_state['2d_plot']
+    if '3d_plot' in st.session_state.keys():
+        del st.session_state['3d_plot']
+    if 'bf_plot' in st.session_state.keys():
+        del st.session_state['bf_plot']
+    if 'tt_plot' in st.session_state.keys():
+        del st.session_state['tt_plot']

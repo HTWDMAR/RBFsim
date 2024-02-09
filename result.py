@@ -112,11 +112,19 @@ def app():
 						st.subheader(":blue[Wells in Flow Field:]")
 					else:
 						st.subheader(":blue[Well in Flow Field:]")
-					plot1 = plotting(0, domainsize, -20, domainsize, 100)
-					b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))
-					plt.savefig(f'2D_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
-					plots["2D Plot"] = "./2D_plot.png"
-					st.pyplot(fig1)                        
+					if '2d_plot' not in st.session_state.keys():
+						# print("\n\n\t\t======== 2D PLOT NOT IN SESSION ========\n\n")
+						plot1 = plotting(0, domainsize, -20, domainsize, 100)
+						b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))		
+						st.session_state['2d_plot'] = fig1
+						plt.savefig(f'2D_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
+					else:
+						# print("\n\n\t\t======== 2D PLOT IN SESSION ========\n\n")
+						fig1 = st.session_state['2d_plot']
+					
+					st.pyplot(fig1) 
+					plots["2d Plot"] = "./2D_plot.png"
+					                       
 					
 
 				with c2:
@@ -129,10 +137,19 @@ def app():
 					# Check if the checkbox is checked
 					if display_3d_plot:
 						# Assuming `aem_model` is defined somewhere in your code
-						b2, fig2 = plot1.plot3d(aem_model)
-						plt.savefig(f'3D_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
-						plots["3d Plot"]="./3D_plot.png"
+						if '3d_plot' not in st.session_state.keys():
+							# print("\n\n\t\t!!!!==========3d plot not in session state===========!!!!\n\n")
+							plot1 = plotting(0, domainsize, -20, domainsize, 100)
+							b2, fig2 = plot1.plot3d(aem_model)
+							st.session_state['3d_plot'] = fig2
+							plt.savefig(f'3D_plot.png', transparent=False, facecolor='white', bbox_inches="tight")						
+						
+						else:
+							# print("\n\n\t\t!!!!==========3d plot in session state===========!!!!\n\n")
+							fig2 = st.session_state['3d_plot']
+
 						st.pyplot(fig2)
+						plots["3d Plot"] = "./3D_plot.png"
 
 				st.divider()
 				
@@ -141,7 +158,7 @@ def app():
 				with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
 					if len(results) > 1:
 						st.sidebar.markdown("---")
-						st.sidebar.info("After entering one well, The options will be available here.")
+						st.sidebar.info("**Contribution ratio and travel time are only possible for a single well**")
 					else:
 						solv = river_length(aem_model)
 						
@@ -150,11 +167,20 @@ def app():
 						st.sidebar.title(":red[Contribution Portion:]")
 						if st.sidebar.checkbox("Bank Filtrate Portion"):
 							st.subheader(":blue[Bank Filterate Portion:]")
-							plot = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
-							b, fig = plot.plot2d(aem_model, sharey=False, traj_array=traj_array, levels=8, quiver=False, streams=True)
-							plt.savefig(f'Bank_filtrate_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
-							plots["Bank Filtrate Plot"]="./Bank_filtrate_plot.png"
+
+							if 'bf_plot' not in st.session_state.keys():
+								# print("\n\n\t\t!!!!==========BF plot not in session state===========!!!!\n\n")
+								plot = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
+								b, fig = plot.plot2d(aem_model, sharey=False, traj_array=traj_array, levels=8, quiver=False, streams=True)
+								st.session_state['bf_plot'] = fig
+								plt.savefig(f'Bank_filtrate_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
+								
+							else:
+								# print("\n\n\t\t!!!!==========BF plot in session state===========!!!!\n\n")
+								fig = st.session_state['bf_plot']
+
 							st.pyplot(fig)
+							plots['Bank Filtrate Plot'] = "./Bank_filtrate_plot.png"
 							bf_ratio = capture_fraction * 100
 							bf_ratio_rounded = int(bf_ratio)
 							st.sidebar.metric(label=":blue[Bank Filtrate Portion:]", value="{} %".format(bf_ratio_rounded))
@@ -184,20 +210,24 @@ def app():
 
 
 				# ----------------------------------------------------------------------------Travel Time---------------------------------------------------------------------------
-				if len(results) > 1:
-					st.error(" ** Note: ** Enter Exactly One Well to get the solution for Bank Filtrate Portion, Capture Length and Time of Travel.")
-				else:
+				if len(results) == 1:
 					st.sidebar.markdown("---")
 					st.sidebar.title(":red[Travel time:]")
 					if st.sidebar.checkbox("Travel time"):
 						
 						st.subheader(":blue[Travel time:]")
-						plot2 = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
-						c, fig2 = plot2.plot2d(aem_model, tt=tt, ys=ys, traj_array=traj_array, levels=8, sharey=True, quiver=False, streams=True, figsize=(18, 12))
-						plt.savefig(f'Time_travel_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
-						plots["Time Travel Plot"] = "./Time_travel_plot.png"
+						if 'tt_plot' not in st.session_state.keys():
+							# print("\n\n\t\t!!!!==========TT plot not in session state===========!!!!\n\n")
+							plot2 = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
+							c, fig2 = plot2.plot2d(aem_model, tt=tt, ys=ys, traj_array=traj_array, levels=8, sharey=True, quiver=False, streams=True, figsize=(18, 12))
+							st.session_state['tt_plot'] = fig2	
+							plt.savefig(f'Time_travel_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
+												
+						else:
+							# print("\n\n\t\t!!!!==========TT plot not session state===========!!!!\n\n")
+							fig2 = st.session_state['tt_plot']
 						st.pyplot(fig2)
-
+						plots["Time Travel Plot"] = "./Time_travel_plot.png"
 						avg_tt_rounded = int(avgtt)
 						min_tt_rounded = int(mintt)
 
@@ -207,7 +237,9 @@ def app():
 						tt_dict = {'Average Travel Time\n(days)':f'{avg_tt_rounded}', 'Minimum Travel Time\n(days)':f'{min_tt_rounded}'}
 						st.markdown("---")
 
-				# ------------------------------------------------------------------------------Download Files----------------------------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------------------Download Files----------------------------------------------------------------------------------------
 				plot3 = plotting(0, domainsize, -20, domainsize, 100)
 
 				
@@ -223,7 +255,7 @@ def app():
 				# input_values_df = pd.concat(value_list_dfs, axis = 1)
 									
 				st.sidebar.markdown("---")
-				st.sidebar.title("Download \u03C8 & Head:")
+				st.sidebar.title("Head & Stream Function(\u03C8):")
 				st.sidebar.download_button(label="Download H in CSV", data=csv, mime="csv")
 				st.sidebar.download_button(label="Download \u03C8 in CSV", data=csv_psi, mime="csv")
 
@@ -238,7 +270,8 @@ def app():
 						download_report(report_title, value_list_dfs, plots, bf_dict, tt_dict, drawdown)
 					else:
 						download_report("RBFsim", value_list_dfs, plots, bf_dict, tt_dict, drawdown)
-				
+	st.info("Please clear your cache if you encounter any inconsistencies in the interface.")
+
 
 def create_download_link(val, filename):
 	b64 = base64.b64encode(val)  # val looks like b'...'
@@ -380,9 +413,13 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict, drawdown):
 		row_count += 1
 	pdf.ln(5)
 	
+	if pdf.will_page_break(30):
+		pdf.add_page(format="A4")
+		pdf.ln(5)
 	pdf.set_font('Arial', 'B', 12)
 	pdf.set_text_color(0, 51, 102)
 	pdf.cell(50, 5, "Hydraulic Head Drawdown", ln = 2)
+	pdf.ln(1)
 	pdf.set_font('Arial', '', 10)
 	with pdf.table(line_height=7, width=(pdf.w - left_margin - right_margin), align='L') as table:
 		header_row = table.row()
@@ -391,9 +428,12 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict, drawdown):
 		header_row.cell("Drawdown\n(m)", align='C')    
 		pdf.set_text_color(0, 0, 0)  
 		row.cell(str(drawdown), align='C')
-		pdf.ln(5)
+	pdf.ln(5)
 
 	if bf_dict is not None:
+		if pdf.will_page_break(30):
+			pdf.add_page(format="A4")
+			pdf.ln(5)
 		pdf.set_font('Arial', 'B', 12)
 		pdf.set_text_color(0, 51, 102)
 		pdf.cell(50, 5, "Contribution Portion", ln = 2)
@@ -413,7 +453,11 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict, drawdown):
 				row.cell(str(value), align='C')
 			
 		pdf.ln(5)
+		
 	if tt_dict is not None:
+		if pdf.will_page_break(30):
+			pdf.add_page(format="A4")
+			pdf.ln(5)
 		pdf.set_font('Arial', 'B', 12)
 		pdf.set_text_color(0, 51, 102)
 		pdf.cell(50, 5, "Time of Travel", ln = 2)
