@@ -76,6 +76,7 @@ def app():
 			st.markdown("")
 
 		st.markdown("---")
+	st.info("Holzbecher, E. (2013), Analytical Solution for Well Design with Respect to Discharge Ratio. Groundwater, 51: 128-134. ***[https://doi.org/10.1111/j.1745-6584.2012.00927.x](https://doi.org/10.1111/j.1745-6584.2012.00927.x)***.")
 
 	with e2:
 				

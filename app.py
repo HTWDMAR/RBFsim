@@ -8,7 +8,6 @@ st.set_page_config(
     layout="centered", page_title="RBFsim", page_icon="♨"
 )
 
-
 app = MultiApp()
 
 
@@ -24,3 +23,9 @@ app.add_app("Help Page",new_help.app)
 
 # The main app
 app.run()
+clear_cache_btn = st.sidebar.button("Clear Cache")
+if clear_cache_btn:
+    # for key in st.session_state.keys():
+    #     del st.session_state[key]
+    st.cache_data.clear()
+    st.rerun()

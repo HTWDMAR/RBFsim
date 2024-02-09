@@ -133,7 +133,7 @@ def app():
             with c6 :
                 st.write('')
         
-        st.subheader(":blue[FAQ's]")
+        # st.subheader(":blue[FAQ's]")
                 
             
 
@@ -147,9 +147,10 @@ def app():
         with open("Manual/RBFsim User Manual_03.09.2022.pdf", "rb") as pdf_file:
             PDFbyte = pdf_file.read()
 
-        st.download_button(label="Download Literature Manual",
+        st.download_button(label="Download Manual",
                     data=PDFbyte,
                     file_name="RBFSim-Literature-Manual.pdf",
                     mime='application/octet-stream')
-
+            
+    st.info("Please clear your cache if you encounter any inconsistencies in the interface.")
         
