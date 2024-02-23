@@ -16,7 +16,7 @@ def app():
         st.session_state.cf_ls=[]
     st.title(':red[Data Input Interface]')
     
-    aq_dc,well_dc,clo_dc,updown = st.tabs(["**Aquifer**", "**Well**","**Clogging Factor**","**View/Upload/Download Data**"])
+    aq_dc,well_dc,clo_dc,updown = st.tabs(["**Aquifer**", "**Well**","**River**","**View/Upload/Download Data**"])
     st.write("")
     with aq_dc :
         col1, col2 = st.columns(2)
