@@ -42,7 +42,7 @@ def app():
 	if 'aq_ls' and 'we_ls' and 'cf_ls' in st.session_state :
 		value_list_dfs = {}
 		modified_aq_ls = [[*inner[1:]] for inner in st.session_state.aq_ls]
-		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Hydraulic Gradient\n(\u2030)', 'Porosity', 'Hydraulic Conductivity\n(m/day)', 'River Stage\n(m)']).astype('O')
+		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Hydraulic Gradient\n(\u2030)', 'Porosity', 'Hydraulic Conductivity\n(m/day)']).astype('O')
 		value_list_dfs["Aquifer Data"] = aq_ls_df
 		modified_we_ls_df = [[*inner[1:]] for inner in st.session_state.we_ls]
 		we_ls_df = pd.DataFrame(modified_we_ls_df, columns=['Pumping Rate\n(m\u00B3/day)', 'X-Coordinates\n(m)', 'Y-Coordinates\n(m)'])
@@ -74,7 +74,7 @@ def app():
 
 			# menu = ["Wells", "Rivers", "No Flow"]
 			# choice = st.sidebar.selectbox("Please Select Boundary Condition", menu)
-			aem_model = model_pro.Model(k=results_aq[0][4], H=results_aq[0][1], h0=results_aq[0][5], Qo_x=results_aq[0][2]*results_aq[0][4]*(results_aq[0][2]*domainsize+results_aq[0][5]))
+			aem_model = model_pro.Model(k=results_aq[0][4], H=results_aq[0][1], h0=results_clg[0][3], Qo_x=results_aq[0][2]*results_aq[0][4]*(results_aq[0][2]*domainsize+results_clg[0][3]))
 			
 			################################## Check AEM Model
 			with view_plots:
@@ -83,8 +83,8 @@ def app():
 					st.info("No Clogging Factor is Added!")
 				else:
 					modified_clg = [[*inner[1:]] for inner in results_clg]
-					cf_df = pd.DataFrame(modified_clg, columns=['Condutivity\n(m/day)', 'Thickness\n(m)']).astype('O')
-					cf_df = cf_df.reindex(columns=['Thickness\n(m)', 'Condutivity\n(m/day)'])
+					cf_df = pd.DataFrame(modified_clg, columns=['Condutivity\n(m/day)', 'Thickness\n(m)', 'River Stage\n(m)']).astype('O')
+					cf_df = cf_df.reindex(columns=['Thickness\n(m)', 'Condutivity\n(m/day)', 'River Stage\n(m)'])
 					value_list_dfs["Clogging Factor"] = cf_df
 					aem_model.calc_clogging(results_clg[0][1], results_clg[0][2])
 				
