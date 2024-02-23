@@ -122,7 +122,7 @@ def app():
 
                 #results3_aq = view_all_data_aq()
                 with st.expander("Current Data"):
-                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity', 'River Stage'])
+                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity'])
                     st.dataframe(df3_aq)
 
         st.divider()
@@ -255,14 +255,14 @@ def app():
     with clo_dc :
         col1, col2 = st.columns(2)
         with col1:
-            st.subheader(':blue[Clogging Factor]')
+            st.subheader(':blue[River]')
         with col2:
             if len(st.session_state.cf_ls) == 0:
                 menu_clg = ["New Data", "Update Data", "Delete Data"]
-                choice_clg = st.selectbox("Select Action (Clogging Factor)", menu_clg)
+                choice_clg = st.selectbox("Select Action (River)", menu_clg)
             elif len(st.session_state.cf_ls) != 0:
                 menu_clg = ["Update Data", "Delete Data"]
-                choice_clg = st.selectbox("Select Action (Clogging Factor)", menu_clg)
+                choice_clg = st.selectbox("Select Action (River)", menu_clg)
 
         st.divider()
         st.subheader(":blue[Add Values]")
@@ -276,7 +276,7 @@ def app():
             with col2:
                 dc = st.number_input("Thickness of Layer (m):", 0., 0.5, 0.01)
                 #dc=dc/100
-            if st.button("Add Values for Clogging Factor"):
+            if st.button("Add Values for River"):
                 st.session_state.cf_ls.append([clg_id, kd, dc, ref_head])
                 st.success("Colmation Layer {} Added".format(clg_id))
                 clear_plots()
@@ -408,7 +408,7 @@ def app():
                 st.write(":blue[Well Data]")
                 st.dataframe(well_data)
 
-                st.write(":blue[Clogging Factor Data]")
+                st.write(":blue[River Data]")
                 st.dataframe(clogging_factor_data)
 
                 # Convert to lists and store in session_state

@@ -53,12 +53,12 @@ def app():
 		#st.write("off we go now")
 		#st.write(len(st.session_state.aq_ls))
 
-		if len(st.session_state.aq_ls) == 0 or len(st.session_state.we_ls) == 0 :
+		if len(st.session_state.aq_ls) == 0 or len(st.session_state.we_ls) == 0 or len(st.session_state.cf_ls) == 0:
 			with view_plots:
 				st.subheader(":blue[Please Input required data for the simulation]")
 			with report:
 				st.subheader(":blue[Please Input required data for the simulation]")
-		if len(st.session_state.aq_ls) != 0 and len(st.session_state.we_ls) !=0 :
+		if len(st.session_state.aq_ls) != 0 and len(st.session_state.we_ls) !=0 and len(st.session_state.cf_ls) != 0:
 			results_aq = st.session_state.aq_ls
 			results = st.session_state.we_ls
 			results_clg = st.session_state.cf_ls	
@@ -80,12 +80,12 @@ def app():
 			with view_plots:
 
 				if len(results_clg) == 0:
-					st.info("No Clogging Factor is Added!")
+					st.info("No River Data is Added!")
 				else:
 					modified_clg = [[*inner[1:]] for inner in results_clg]
 					cf_df = pd.DataFrame(modified_clg, columns=['Condutivity\n(m/day)', 'Thickness\n(m)', 'River Stage\n(m)']).astype('O')
 					cf_df = cf_df.reindex(columns=['Thickness\n(m)', 'Condutivity\n(m/day)', 'River Stage\n(m)'])
-					value_list_dfs["Clogging Factor"] = cf_df
+					value_list_dfs["River"] = cf_df
 					aem_model.calc_clogging(results_clg[0][1], results_clg[0][2])
 				
 
@@ -101,7 +101,7 @@ def app():
 				c1, c2 = st.columns(2)
 				
 				wellhead = model_pro.Model.calc_head(aem_model, results[0][2]+0.3, results[0][3])
-				drawdown = (results_aq[0][2]*(results[0][2]+0.3)+results_aq[0][5]) - wellhead
+				drawdown = (results_aq[0][2]*(results[0][2]+0.3)+results_clg[0][3]) - wellhead
 				drawdown = round(drawdown, 2)
 				st.sidebar.title(":red[Hydraulic Head Drawdown:]")
 				st.sidebar.metric(label=":blue[Drawdown:]", value="{} m".format(drawdown))
