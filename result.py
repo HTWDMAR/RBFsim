@@ -95,17 +95,6 @@ def app():
 							well = model_pro.Well(aem_model, Q=results[i][1], rw=0.2, x=results[i][2], y=results[i][3])
 			
 				c1, c2 = st.columns(2)
-				
-				
-				# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
-				c1, c2 = st.columns(2)
-				
-				wellhead = model_pro.Model.calc_head(aem_model, results[0][2]+0.3, results[0][3])
-				drawdown = (results_aq[0][2]*(results[0][2]+0.3)+results_clg[0][3]) - wellhead
-				drawdown = round(drawdown, 2)
-				st.sidebar.title(":red[Hydraulic Head Drawdown:]")
-				st.sidebar.metric(label=":blue[Drawdown:]", value="{} m".format(drawdown))
-				#or st.sidebar.write(f"{value_to_print")
 				# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
 				with c1:
 					if len(results)>(1):
@@ -151,15 +140,24 @@ def app():
 						st.pyplot(fig2)
 						plots["3d Plot"] = "./3D_plot.png"
 
-				st.divider()
 				
 				c1,c2=st.columns(2)
 									
 				with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
 					if len(results) > 1:
-						st.sidebar.markdown("---")
-						st.sidebar.info("**Contribution ratio and travel time are only possible for a single well**")
+						st.sidebar.info("**Drawdown, Contribution ratio and travel time are only possible for a single well**")
 					else:
+						wellhead = model_pro.Model.calc_head(aem_model, results[0][2]+0.3, results[0][3])
+						drawdown = (results_aq[0][2]*(results[0][2]+0.3)+results_clg[0][3]) - wellhead
+						drawdown = round(drawdown, 2)
+						if not np.isnan(drawdown):
+							st.sidebar.title(":red[Hydraulic Head Drawdown:]")
+							st.sidebar.metric(label=":blue[Drawdown:]", value="{} m".format(drawdown))
+							wellhead = model_pro.Model.calc_head(aem_model, results[0][2]+0.3, results[0][3])
+							st.sidebar.write("---")
+						else:
+							drawdown = "Undefined"
+
 						solv = river_length(aem_model)
 						
 						length, riv_coords, capture_fraction = solv.solve_river_length()
