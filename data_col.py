@@ -31,10 +31,9 @@ def app():
                 choice_aq = st.selectbox("Select Action (Aquifer)", menu_aq)
         
         st.divider()
-#-------------------------------------------------------------Create_aq-------------------------------------------------------------------------------------------------------------------
         if choice_aq == "New Data":
             st.subheader(":blue[Add Values]")
-            col1, col2, col3 = st.columns(3)
+            col1, col2 = st.columns(2)
             with col1:
                 # aq_id = st.number_input('Aquifer ID', 1, 10, 1)
                 aq_id=1 #for allowing only one aquifer input 
@@ -42,31 +41,25 @@ def app():
                 Gradient = st.number_input("Head Gradient (‰):",0.,10.,2.,1.)
                 Gradient = Gradient/1000
                 #baseflow = st.number_input('Base Flow (m\u00B2/day):', 0., 1000.,1.)
-            with col2:
-                
-                ref_head = st.number_input('River Stage (m)', 1.,200.,15.)
-                porosity = st.number_input('Effective Porosity:', 0.1,0.4,0.25,help='< 0.5')
-            with col3:
-                
+            with col2:                
+                porosity = st.number_input('Effective Porosity:', 0.1,0.4,0.25,help='< 0.5')                
                 hyd_con = st.number_input('Hydraulic Conductivity (m/day)', 1., 1000., 10., help='Range : 1 - 1000')
             
             if st.button("Add Values for Aquifer"):
                 #add_data_aq(aq_id, thk_aq, baseflow, porosity, hyd_con, ref_head)   ########### Need to add st.session state out here if want to use new format
-                st.session_state.aq_ls.append([aq_id, thk_aq, Gradient, porosity, hyd_con, ref_head])
+                st.session_state.aq_ls.append([aq_id, thk_aq, Gradient, porosity, hyd_con])
                 st.success("Values added Successfully")   
                 clear_plots()
                 st.rerun()             
-#-------------------------------------------------------------Read_aq-----------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------Update_aq--------------------------------------------------------------------------------------------------------------------                    
         elif choice_aq == "Update Data":
             if len(st.session_state.aq_ls)== 0 :
                 st.write("Enter Data, Current Data set Empty")
-                df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity', 'River Stage'])
+                df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity'])
                 st.dataframe(df3_aq)
             if len(st.session_state.aq_ls)!= 0 :
                 st.subheader("Edit/Update Values")
                 with st.expander("View All Data"):
-                    df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity', 'River Stage'])
+                    df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity'])
                     st.dataframe(df_aq)
 
                 # list_of_data_aq = [i[0] for i in st.session_state.aq_ls]                  #### Need to read aq_dat and give flxibility to modify
@@ -79,9 +72,8 @@ def app():
                     Gradient = selected_result_aq[0][2]
                     porosity = selected_result_aq[0][3]
                     hyd_con = selected_result_aq[0][4]
-                    ref_head = selected_result_aq[0][5]
 
-                    col1, col2, col3 = st.columns(3)
+                    col1, col2 = st.columns(2)
                     with col1:
                         # new_aq_id = st.number_input("Aquifer ID:", aq_id)
                         new_aq_id = 1
@@ -90,35 +82,31 @@ def app():
                         new_Gradient = new_Gradient/1000
 
                     with col2:                        
-                        new_ref_head = st.number_input("River Stage (m):", 1., 200., float(ref_head))
-                        new_porosity = st.number_input("Porosity:",0., 1., float(porosity),help='< 0.5')
-                    
-                    with col3:                       
+                        new_porosity = st.number_input("Porosity:",0., 1., float(porosity),help='< 0.5')               
                         new_hyd_con = st.number_input("Hydraulic Conductivity (m/day):",1., 1000., float(hyd_con),help='Range : 1 - 1000')
                     
                     if st.button("Update Values for Aquifer"):
                         
                         j=[] ##### Using this method since only 1 aquifer is being added for this code 
-                        j.append([new_aq_id, new_thk_aq, new_Gradient, new_porosity, new_hyd_con, new_ref_head])
+                        j.append([new_aq_id, new_thk_aq, new_Gradient, new_porosity, new_hyd_con])
                         
                         st.session_state.aq_ls=j
                         st.success("Values added Successfully")
                         clear_plots()
                         
                 with st.expander("Updated Data"):
-                    df2_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity', 'River Stage'])
+                    df2_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity'])
                     st.dataframe(df2_aq)
 
-#----------------------------------------------------------------------Delete_aq-------------------------------------------------------------------------------------------------
         elif choice_aq == "Delete Data":
             if len(st.session_state.aq_ls)== 0 :
                 st.write("Enter Data, Current Data set Empty")
-                df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity', 'River Stage'])
+                df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity'])
                 st.dataframe(df3_aq)
             if len(st.session_state.aq_ls)!= 0 :
                 st.subheader("Delete Values")
                 with st.expander("View All Data"):
-                    df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity', 'River Stage'])
+                    df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity'])
                     st.dataframe(df_aq)
 
                 # list_of_data_aq = [i[0] for i in st.session_state.aq_ls]      
@@ -134,7 +122,7 @@ def app():
 
                 #results3_aq = view_all_data_aq()
                 with st.expander("Current Data"):
-                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity', 'River Stage'])
+                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity'])
                     st.dataframe(df3_aq)
 
         st.divider()
@@ -153,9 +141,7 @@ def app():
                 if st.download_button(key="aquifer_download", label='Download Table', data=df_aq.to_csv(),mime='text/csv'):
                     st.success("Your File Successfully Downloaded")
         st.divider()
-#---------------------------------------------------------------------Aquifer Finish-------------------------------------------------------------------------------------    
-    
-    
+#---------------------------------------------------------------------Aquifer Finish-------------------------------------------------------------------------------------        
     with well_dc :
         col1, col2 = st.columns(2)
         with col1:
@@ -163,11 +149,12 @@ def app():
             
         with col2 :
             st.write('')
-            menu_well = ["New Data","Update Data", "Delete Data"]
+            if len(st.session_state.we_ls) == 0:
+                menu_well = ["New Data","Update Data", "Delete Data"]
+            else:
+                menu_well = ["Update Data", "Delete Data", "New Data"]
             choice_well = st.selectbox("Select Action (Well)", menu_well)
         st.divider()
-
-#----------------------------------------------------------------------Create_Well----------------------------------------------------------------------------------------                   
         if choice_well == "New Data":
             st.subheader(":blue[Add Values]")
 
@@ -185,7 +172,6 @@ def app():
                 st.success("Successfully Added Values for Well: {}".format(well_id))
                 clear_plots()   
 
-#---------------------------------------------------------------------Update_Well--------------------------------------------------------------------------------
         elif choice_well == "Update Data":
             if len(st.session_state.we_ls)== 0 :
                 st.write("Enter Data, Current Data set Empty")
@@ -228,8 +214,7 @@ def app():
                 with st.expander("Updated Data"):
                     df2 = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
                     st.dataframe(df2)
-#---------------------------------------------------------------------------------Delete_Well--------------------------------------------------------------------------
-
+    
         elif choice_well == "Delete Data":
             if len(st.session_state.we_ls)== 0 :
                 st.write("Enter Data, Current Data set Empty")
@@ -270,14 +255,14 @@ def app():
     with clo_dc :
         col1, col2 = st.columns(2)
         with col1:
-            st.subheader(':blue[Clogging Factor]')
+            st.subheader(':blue[River]')
         with col2:
             if len(st.session_state.cf_ls) == 0:
                 menu_clg = ["New Data", "Update Data", "Delete Data"]
-                choice_clg = st.selectbox("Select Action (Clogging Factor)", menu_clg)
+                choice_clg = st.selectbox("Select Action (River)", menu_clg)
             elif len(st.session_state.cf_ls) != 0:
                 menu_clg = ["Update Data", "Delete Data"]
-                choice_clg = st.selectbox("Select Action (Clogging Factor)", menu_clg)
+                choice_clg = st.selectbox("Select Action (River)", menu_clg)
 
         st.divider()
         st.subheader(":blue[Add Values]")
@@ -287,11 +272,12 @@ def app():
                 #clg_id = st.number_input("Colmation Layer ID (n):", 1.,1.,1.)
                 clg_id=1
                 kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0.01, 10., 0.1)
+                ref_head = st.number_input('River Stage (m)', 1.,200.,15.)
             with col2:
                 dc = st.number_input("Thickness of Layer (m):", 0., 0.5, 0.01)
                 #dc=dc/100
-            if st.button("Add Values for Clogging Factor"):
-                st.session_state.cf_ls.append([clg_id, kd, dc])
+            if st.button("Add Values for River"):
+                st.session_state.cf_ls.append([clg_id, kd, dc, ref_head])
                 st.success("Colmation Layer {} Added".format(clg_id))
                 clear_plots()
                 st.rerun()
@@ -301,12 +287,12 @@ def app():
         elif choice_clg == "Update Data":
                     if len(st.session_state.cf_ls)== 0 :
                         st.write("Enter Data, Current Data set Empty")
-                        df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value'])
+                        df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value', 'River Stage'])
                         st.dataframe(df_clg)
                     if len(st.session_state.cf_ls)!=0 :
                         #results_clg = view_all_data_clg()
                         with st.expander("Current Data"):
-                            df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value'])
+                            df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value', 'River Stage'])
                             st.dataframe(df_clg)
 
                         # list_of_data_clg = [i[0] for i in st.session_state.cf_ls]
@@ -318,12 +304,14 @@ def app():
                         if selected_result_clg:
                             clg_id = selected_result_clg[0][0]
                             kd = selected_result_clg[0][1]
-                            dc = selected_result_clg[0][2]
+                            dc = selected_result_clg[0][2]                          
+                            ref_head = selected_result_clg[0][3]
                             
                             with col1:
                                 #new_clg_id = st.number_input("Colmation Layer ID (n):", 1.,1., float(clg_id))
                                 new_kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0.01, 10., float(kd))
                                 new_clg_id=1
+                                new_ref_head = st.number_input("River Stage (m):", 1., 200., float(ref_head))
                             with col2:
                                 #new_kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0., 1000., float(kd))
                                 new_dc = st.number_input("Thickness of Layer (m):", 0., 0.5, float(dc))
@@ -331,7 +319,7 @@ def app():
                             if st.button("Update Values."):
                                 st.session_state.cf_ls=[]
                                 j=[]
-                                j.append([new_clg_id,new_kd,new_dc])
+                                j.append([new_clg_id,new_kd,new_dc,new_ref_head])
                                 st.session_state.cf_ls=j
                                 st.success("Successfully Updated!")
                                 clear_plots()
@@ -340,19 +328,19 @@ def app():
 
                         #results4 = view_all_data_clg()
                         with st.expander("Updated Data"):
-                            df4 = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value'])
+                            df4 = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value', 'River Stage'])
                             st.dataframe(df4)
 
 
         elif choice_clg == "Delete Data":
                     if len(st.session_state.cf_ls)== 0 :
                         st.write("Enter Data, Current Data set Empty")
-                        df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value'])
+                        df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value' ,'River Stage'])
                         st.dataframe(df_clg)
                     if len(st.session_state.cf_ls) !=0 :
                     #results_clg = view_all_data_clg()
                         with st.expander("Current Data"):
-                            df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value'])
+                            df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value', 'River Stage'])
                             st.dataframe(df_clg)
                         # list_of_data_clg = [i[0] for i in st.session_state.cf_ls]
                         # selected_data_clg = st.selectbox("Layer ID to Delete", list_of_data_clg)
@@ -371,7 +359,7 @@ def app():
         with col2:
                 st.write('')
                 if st.checkbox("Display Current Clogging Data"):
-                    df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value'])
+                    df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value', 'River Stage'])
                     st.dataframe(df_clg)
         st.divider()
 
@@ -388,13 +376,13 @@ def app():
                 st.info("No data added yet!")
             else:
                 if st.session_state.aq_ls:
-                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Reference Head'])
+                    df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity'])
                     st.dataframe(df3_aq)
                 if st.session_state.we_ls:
                     df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
                     st.dataframe(df)
                 if st.session_state.cf_ls:
-                    df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value'])
+                    df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value', 'River Stage'])
                     st.dataframe(df_clg)
 
         with retri :
@@ -409,9 +397,9 @@ def app():
                     df = pd.read_excel(uploaded_file)
 
                 # Divide the DataFrame based on the column headers
-                aquifer_data = df[['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head']]
+                aquifer_data = df[['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity']]
                 well_data = df[['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates']]
-                clogging_factor_data = df[['Layer ID', 'K Value', 'D Value']]
+                clogging_factor_data = df[['Layer ID', 'K Value', 'D Value', 'River Stage']]
 
                 # Display the parts
                 st.write(":blue[Aquifer Data]")
@@ -420,7 +408,7 @@ def app():
                 st.write(":blue[Well Data]")
                 st.dataframe(well_data)
 
-                st.write(":blue[Clogging Factor Data]")
+                st.write(":blue[River Data]")
                 st.dataframe(clogging_factor_data)
 
                 # Convert to lists and store in session_state
@@ -431,14 +419,14 @@ def app():
         with back :
             #st.subheader(":blue[Data Backup]")
             #st.write(":[Click ]")
-            df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'Refernce Head'])
+            df3_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity'])
             #st.dataframe(df3_aq)
 
             df = pd.DataFrame(st.session_state.we_ls, columns=['Well ID', 'Pumping Rate', 'X-Coordinates', 'Y-Coordinates'])
             #st.dataframe(df)
 
 
-            df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value'])
+            df_clg = pd.DataFrame(st.session_state.cf_ls, columns=['Layer ID', 'K Value', 'D Value', 'River Stage'])
             #st.dataframe(df_clg)
 
             merged_df = df3_aq.merge(df, left_on='Aquifer ID', right_on='Well ID', how='inner')

@@ -42,7 +42,7 @@ def app():
 	if 'aq_ls' and 'we_ls' and 'cf_ls' in st.session_state :
 		value_list_dfs = {}
 		modified_aq_ls = [[*inner[1:]] for inner in st.session_state.aq_ls]
-		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Hydraulic Gradient\n(\u2030)', 'Porosity', 'Hydraulic Conductivity\n(m/day)', 'River Stage\n(m)']).astype('O')
+		aq_ls_df = pd.DataFrame(modified_aq_ls, columns=['Thickness\n(m)', 'Hydraulic Gradient\n(\u2030)', 'Porosity', 'Hydraulic Conductivity\n(m/day)']).astype('O')
 		value_list_dfs["Aquifer Data"] = aq_ls_df
 		modified_we_ls_df = [[*inner[1:]] for inner in st.session_state.we_ls]
 		we_ls_df = pd.DataFrame(modified_we_ls_df, columns=['Pumping Rate\n(m\u00B3/day)', 'X-Coordinates\n(m)', 'Y-Coordinates\n(m)'])
@@ -53,12 +53,12 @@ def app():
 		#st.write("off we go now")
 		#st.write(len(st.session_state.aq_ls))
 
-		if len(st.session_state.aq_ls) == 0 or len(st.session_state.we_ls) == 0 :
+		if len(st.session_state.aq_ls) == 0 or len(st.session_state.we_ls) == 0 or len(st.session_state.cf_ls) == 0:
 			with view_plots:
 				st.subheader(":blue[Please Input required data for the simulation]")
 			with report:
 				st.subheader(":blue[Please Input required data for the simulation]")
-		if len(st.session_state.aq_ls) != 0 and len(st.session_state.we_ls) !=0 :
+		if len(st.session_state.aq_ls) != 0 and len(st.session_state.we_ls) !=0 and len(st.session_state.cf_ls) != 0:
 			results_aq = st.session_state.aq_ls
 			results = st.session_state.we_ls
 			results_clg = st.session_state.cf_ls	
@@ -74,18 +74,18 @@ def app():
 
 			# menu = ["Wells", "Rivers", "No Flow"]
 			# choice = st.sidebar.selectbox("Please Select Boundary Condition", menu)
-			aem_model = model_pro.Model(k=results_aq[0][4], H=results_aq[0][1], h0=results_aq[0][5], Qo_x=results_aq[0][2]*results_aq[0][4]*(results_aq[0][2]*domainsize+results_aq[0][5]))
+			aem_model = model_pro.Model(k=results_aq[0][4], H=results_aq[0][1], h0=results_clg[0][3], Qo_x=results_aq[0][2]*results_aq[0][4]*(results_aq[0][2]*domainsize+results_clg[0][3]))
 			
 			################################## Check AEM Model
 			with view_plots:
 
 				if len(results_clg) == 0:
-					st.info("No Clogging Factor is Added!")
+					st.info("No River Data is Added!")
 				else:
 					modified_clg = [[*inner[1:]] for inner in results_clg]
-					cf_df = pd.DataFrame(modified_clg, columns=['Condutivity\n(m/day)', 'Thickness\n(m)']).astype('O')
-					cf_df = cf_df.reindex(columns=['Thickness\n(m)', 'Condutivity\n(m/day)'])
-					value_list_dfs["Clogging Factor"] = cf_df
+					cf_df = pd.DataFrame(modified_clg, columns=['Condutivity\n(m/day)', 'Thickness\n(m)', 'River Stage\n(m)']).astype('O')
+					cf_df = cf_df.reindex(columns=['Thickness\n(m)', 'Condutivity\n(m/day)', 'River Stage\n(m)'])
+					value_list_dfs["River"] = cf_df
 					aem_model.calc_clogging(results_clg[0][1], results_clg[0][2])
 				
 
@@ -95,17 +95,6 @@ def app():
 							well = model_pro.Well(aem_model, Q=results[i][1], rw=0.2, x=results[i][2], y=results[i][3])
 			
 				c1, c2 = st.columns(2)
-				
-				
-				# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
-				c1, c2 = st.columns(2)
-				
-				wellhead = model_pro.Model.calc_head(aem_model, results[0][2]+0.3, results[0][3])
-				drawdown = (results_aq[0][2]*(results[0][2]+0.3)+results_aq[0][5]) - wellhead
-				drawdown = round(drawdown, 2)
-				st.sidebar.title(":red[Hydraulic Head Drawdown:]")
-				st.sidebar.metric(label=":blue[Drawdown:]", value="{} m".format(drawdown))
-				#or st.sidebar.write(f"{value_to_print")
 				# ------------------------------------------------------------------Stream / Potential Lines for Multiple Wells-----------------------------    
 				with c1:
 					if len(results)>(1):
@@ -151,15 +140,24 @@ def app():
 						st.pyplot(fig2)
 						plots["3d Plot"] = "./3D_plot.png"
 
-				st.divider()
 				
 				c1,c2=st.columns(2)
 									
 				with c1:# ------------------------------------------------------------------CR, TT, RL for One Well ------------------------------------------------
 					if len(results) > 1:
-						st.sidebar.markdown("---")
-						st.sidebar.info("**Contribution ratio and travel time are only possible for a single well**")
+						st.sidebar.info("**Drawdown, Contribution ratio and travel time are only possible for a single well**")
 					else:
+						wellhead = model_pro.Model.calc_head(aem_model, results[0][2]+0.3, results[0][3])
+						drawdown = (results_aq[0][2]*(results[0][2]+0.3)+results_clg[0][3]) - wellhead
+						drawdown = round(drawdown, 2)
+						if not np.isnan(drawdown):
+							st.sidebar.title(":red[Hydraulic Head Drawdown:]")
+							st.sidebar.metric(label=":blue[Drawdown:]", value="{} m".format(drawdown))
+							wellhead = model_pro.Model.calc_head(aem_model, results[0][2]+0.3, results[0][3])
+							st.sidebar.write("---")
+						else:
+							drawdown = "Undefined"
+
 						solv = river_length(aem_model)
 						
 						length, riv_coords, capture_fraction = solv.solve_river_length()

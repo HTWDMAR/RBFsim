@@ -1,3 +1,1 @@
-Aquifer ID,Thickness,Base Flow,Porosity,Hydraulic Conductivity,Refernce Head,Well ID,Pumping Rate,X-Coordinates,Y-Coordinates,Layer ID,K Value,D Value
-1,20.0,0.002,0.25,10.0,15.0,1,1000.0,50,250,1,0.1,0.01
-1,20.0,0.002,0.25,10.0,15.0,1,1000.0,50,250,1,0.1,0.01
+Aquifer ID,Thickness,Base Flow,Porosity,Hydraulic Conductivity,Well ID,Pumping Rate,X-Coordinates,Y-Coordinates,Layer ID,K Value,D Value,River Stage
