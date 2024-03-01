@@ -271,10 +271,10 @@ def app():
             with col1:
                 #clg_id = st.number_input("Colmation Layer ID (n):", 1.,1.,1.)
                 clg_id=1
-                kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0.01, 10., 0.1)
+                kd = st.number_input("Hydraulic Condutivity of Clogging Layer (m/day):", 0.01, 10., 0.1)
                 ref_head = st.number_input('River Stage (m)', 1.,200.,15.)
             with col2:
-                dc = st.number_input("Thickness of Layer (m):", 0., 0.5, 0.01)
+                dc = st.number_input("Thickness of Clogging Layer (m):", 0., 0.5, 0.01)
                 #dc=dc/100
             if st.button("Add Values for River"):
                 st.session_state.cf_ls.append([clg_id, kd, dc, ref_head])
@@ -309,12 +309,12 @@ def app():
                             
                             with col1:
                                 #new_clg_id = st.number_input("Colmation Layer ID (n):", 1.,1., float(clg_id))
-                                new_kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0.01, 10., float(kd))
+                                new_kd = st.number_input("Hydraulic Condutivity of Clogging Layer (m/day):", 0.01, 10., float(kd))
                                 new_clg_id=1
                                 new_ref_head = st.number_input("River Stage (m):", 1., 200., float(ref_head))
                             with col2:
                                 #new_kd = st.number_input("Hydraulic Condutivity of Layer (m/day):", 0., 1000., float(kd))
-                                new_dc = st.number_input("Thickness of Layer (m):", 0., 0.5, float(dc))
+                                new_dc = st.number_input("Thickness of Clogging Layer (m):", 0., 0.5, float(dc))
 
                             if st.button("Update Values."):
                                 st.session_state.cf_ls=[]

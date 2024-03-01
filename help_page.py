@@ -60,7 +60,6 @@ def app():
 			st.subheader(":blue[Equation:]")
 			st.markdown("***(From Holzbecher, 2013)***")
 			st.markdown("")
-			st.markdown("")
 			st.latex(r'''
 				f(\beta) = -\arctan(\sqrt{\beta}) + \frac{\sqrt{\beta}}{\beta+1} + \frac{\Pi\alpha}{2}
 			''')
@@ -76,7 +75,7 @@ def app():
 			st.markdown("")
 
 		st.markdown("---")
-	st.info("Holzbecher, E. (2013), Analytical Solution for Well Design with Respect to Discharge Ratio. Groundwater, 51: 128-134. ***[https://doi.org/10.1111/j.1745-6584.2012.00927.x](https://doi.org/10.1111/j.1745-6584.2012.00927.x)***.")
+		st.info("Holzbecher, E. (2013), Analytical Solution for Well Design with Respect to Discharge Ratio. Groundwater, 51: 128-134. ***[https://doi.org/10.1111/j.1745-6584.2012.00927.x](https://doi.org/10.1111/j.1745-6584.2012.00927.x)***.")
 
 	with e2:
 				

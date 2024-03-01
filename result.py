@@ -22,6 +22,7 @@ from PIL import Image
 from plot import *
 from pdf_report import PDF
 from datetime import date
+import data_col
 
 domainsize = 500
 
@@ -101,11 +102,18 @@ def app():
 						st.subheader(":blue[Wells in Flow Field:]")
 					else:
 						st.subheader(":blue[Well in Flow Field:]")
+					# log_plot = st.toggle('log plot', on_change=data_col.clear_plots)
+					log_plot = False
 					if '2d_plot' not in st.session_state.keys():
 						# print("\n\n\t\t======== 2D PLOT NOT IN SESSION ========\n\n")
 						plot1 = plotting(0, domainsize, -20, domainsize, 100)
 						b, fig1 = plot1.plot2d(aem_model, levels=8, sharey=False, quiver=False, streams=True, figsize=(18, 12))		
+						
 						st.session_state['2d_plot'] = fig1
+						if log_plot:
+							ax = plt.gca()
+							# Set the x-scale
+							ax.set_xscale('log', base=2)
 						plt.savefig(f'2D_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
 					else:
 						# print("\n\n\t\t======== 2D PLOT IN SESSION ========\n\n")
@@ -170,6 +178,10 @@ def app():
 								# print("\n\n\t\t!!!!==========BF plot not in session state===========!!!!\n\n")
 								plot = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
 								b, fig = plot.plot2d(aem_model, sharey=False, traj_array=traj_array, levels=8, quiver=False, streams=True)
+								if log_plot:
+									ax = plt.gca()
+									# Set the x-scale
+									ax.set_xscale('log', base=2)
 								st.session_state['bf_plot'] = fig
 								plt.savefig(f'Bank_filtrate_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
 								
@@ -218,6 +230,10 @@ def app():
 							# print("\n\n\t\t!!!!==========TT plot not in session state===========!!!!\n\n")
 							plot2 = plotting(0, domainsize, -20, domainsize, 100, riv_coords)
 							c, fig2 = plot2.plot2d(aem_model, tt=tt, ys=ys, traj_array=traj_array, levels=8, sharey=True, quiver=False, streams=True, figsize=(18, 12))
+							if log_plot:
+								ax = plt.gca()
+								# Set the x-scale
+								ax.set_xscale('log', base=2)
 							st.session_state['tt_plot'] = fig2	
 							plt.savefig(f'Time_travel_plot.png', transparent=False, facecolor='white', bbox_inches="tight")
 												
@@ -313,58 +329,8 @@ def download_report(title, value_list_dfs, plots, bf_dict, tt_dict, drawdown):
 				for value in df_row:
 					row.cell(str(value), align='C')
 		pdf.ln(5)
-		#---formatting for displaying plot images---
-	row_count=0
-	
 	img_margin = 2
-	#---if even number of images then allow 2 images per row else allow upto 3---
-	# if len(plots) == 1:
-	# 	img_per_row = 1    
-	# 	img_width = pdf.w / 1.75
-	# elif len(plots) % 2 != 0:
-	# 	row = len(plots) / 3
-	# 	img_per_row = 3
-	# 	img_width = (pdf.w - (left_margin+right_margin +(img_per_row - 1) * 5)) / img_per_row
-	# else:
-	# 	row = len(plots) // 2
-	# 	img_per_row = 2
-	# 	img_width = (pdf.w - (left_margin+right_margin +(img_per_row - 1) * 5)) / img_per_row
-		
-	# img_heights = [] 
-	# for label, plot in plots.items():
-	# 	img=Image.open(plot)
-	# 	w, h = img.size
-	# 	aspect_ratio = h / w
-	# 	img_height = img_width * aspect_ratio     
-		
 
-	# 	if row_count == img_per_row:
-	# 		row_count=0
-	# 		pdf.set_y(final_y+max(img_heights)+5)  
-	# 		img_heights.clear()
-			
-	# 	if row_count == 0 and (pdf.get_y() + img_height + 15) > pdf.h:
-	# 		pdf.add_page(format='A4')    
-	# 		# pdf.set_margins(20, 10, 10)
-	# 		# pdf.set_x(10)
-	# 		pdf.ln(5)
-			
-			
-
-			
-	# 	x = pdf.get_x()
-	# 	y = pdf.get_y()
-	# 	pdf.set_font('Arial', 'B', 10)
-	# 	pdf.cell(img_width, 10, f"{label}", ln=1, align='C')    
-	# 	final_y = pdf.get_y() 
-	# 	p_img = pdf.image(plot, x=x, y=final_y, w=img_width, h=img_height)
-	# 	img_heights.append(img_height)
-	# 	if label != list(plots.keys())[-1]:
-	# 		pdf.set_xy(x+img_width+5, y)   
-	# 	else:
-	# 		pdf.set_y(final_y+max(img_heights)+5)
-		
-	# 	row_count += 1
 	row_count = 0
 	img_heights = [] 
 	for label, plot in plots.items():
