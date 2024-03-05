@@ -135,7 +135,7 @@ def app():
             if st.checkbox("Display Current Aquifer Data"):
             #st.write(results_aq)
         #with st.expander("View All Data"):
-                df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity', 'River Stage'])
+                df_aq = pd.DataFrame(st.session_state.aq_ls, columns=['Aquifer ID', 'Thickness', 'Gradient', 'Porosity', 'Hydraulic Conductivity'])
                 st.dataframe(df_aq)
                 #df_aq = pd.DataFrame(results_aq, columns=['Aquifer ID', 'Thickness', 'Base Flow', 'Porosity', 'Hydraulic Conductivity', 'River Stage'])
                 if st.download_button(key="aquifer_download", label='Download Table', data=df_aq.to_csv(),mime='text/csv'):
