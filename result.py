@@ -2,7 +2,6 @@ import streamlit as st
 import time
 import numpy as np
 import pandas as pd
-from streamlit.elements.plotly_chart import SHARING_MODES
 import sympy
 from sympy.core.symbol import symbols
 from sympy.solvers.diophantine.diophantine import descent, length
