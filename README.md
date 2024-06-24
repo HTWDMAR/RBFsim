@@ -75,5 +75,5 @@ Following authors are credited for this version [![DOI](https://zenodo.org/badge
 
 The development of RBFsim was funded by the German Federal Ministry of Education and Research in their program "Middle East Regional Water Research Cooperation Program" (MEWAC) within the project “FEMAR – Feasibility of Managed Aquifer Recharge for Safe and Sustainable Water Supply” (BMBF grant no. 02WME1612).
 
-<img src="https://github.com/HTWDMAR/RBFsim/blob/main/images/BMBF.jpg" width="400" height="250"> <img src="https://github.com/HTWDMAR/RBFsim/blob/main/images/MEWAC_logo.jpeg" width="400" height="250">
+<img src="https://github.com/HTWDMAR/RBFsim/blob/main/images/BMBF.jpg" width="200" height="150">                <img src="https://github.com/HTWDMAR/RBFsim/blob/main/images/MEWAC_logo.jpeg" width="200" height="150">
 
