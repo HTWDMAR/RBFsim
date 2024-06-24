@@ -68,7 +68,8 @@ Following authors are credited for this version [![DOI](https://zenodo.org/badge
 
 ## References
 
-- Coming up
+- The publication of the code is at: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6482752.svg)](https://doi.org/10.5281/zenodo.6482752)
+- To be added
 
 
 ## Funding:
