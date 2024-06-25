@@ -13,6 +13,7 @@ import base64
 
 
 def app():
+	
 	#st.title("This is help page")
 
 	y = np.asarray([0.0879, 0.1455, 0.1976, 0.2474, 0.2962, 0.3446, 0.3931, 0.4419, 0.4914,

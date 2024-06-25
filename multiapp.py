@@ -48,3 +48,21 @@ class MultiApp:
             format_func=lambda app: app['title'])
 
         app['function']()
+        with st.sidebar:
+            st.markdown("""<p class="fund_txt">Funded by: German Federal Ministry of Education and Research<br>(BMBF Grant Nr. 02WME1612)<br>MEWAC programme<br>"Feasibility of Managed Aquifer Recharge for Safe and Sustainable Water Supply" (FEMAR) Project</p>""", unsafe_allow_html=True)
+            log1, log2 = st.columns(2)
+            with log1:
+                st.image('images/BMBF.jpg')
+            with log2:
+                st.image('images/MEWAC_logo.jpeg')
+            st.markdown("""<style>
+                p.fund_txt{
+                    font-size : 0.8rem;
+                    font-style : italic;
+                }
+                div[data-testid="stHorizontalBlock"]{
+                    gap : 0.3rem;
+                    align-items : center
+                }
+            </style>""", unsafe_allow_html=True)
+            st.divider()
