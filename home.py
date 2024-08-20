@@ -89,9 +89,10 @@ Following authors are credited for this version [![DOI](https://zenodo.org/badge
 5. **M Gomez** - offline code and case studies
 6. Tassilo Reuschling - First offline code development
 7. Prof. Dr. T. Grischek - Supervisory support on contents
-8. Vibhu Batheja - GUI, Deployment and Verification
-9. Anton Kohler - Model Verification
-10. Pratistha Kansakar - Report creation and optimization
+8. Dr. Cornelius Sandhu
+9. Vibhu Batheja - GUI, Deployment and Verification
+10. Anton Kohler - Model Verification
+11. Pratistha Kansakar - Report creation and optimization
 
 
 
