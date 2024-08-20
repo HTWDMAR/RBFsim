@@ -98,7 +98,7 @@ Following authors are credited for this version [![DOI](https://zenodo.org/badge
 
 **References**
 
-- Yadav, P.K., Batheja, V., Köhler, A., Cantarella, V., Tufail, M., Werth, C., Grischek, T., 2024. ***RBFsim – A tool for early planning stage of riverbank filtration systems. Sustainable Water Resources Management, 10, 167***. [![DOI](https://doi.org/10.1007/s40899-024-01137-9.svg)](https://doi.org/10.1007/s40899-024-01137-9).
+- Yadav, P.K., Batheja, V., Köhler, A., Cantarella, V., Tufail, M., Werth, C., Grischek, T., 2024. ***RBFsim – A tool for early planning stage of riverbank filtration systems.*** Sustainable Water Resources Management, 10, 167. [https://doi.org/10.1007/s40899-024-01137-9](https://doi.org/10.1007/s40899-024-01137-9).
 
      """,icon="ℹ️")
 
