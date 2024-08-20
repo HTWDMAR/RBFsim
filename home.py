@@ -71,7 +71,7 @@ def app():
     
 ######################## Info          
 
-    with st.expander(":red[App Devloper Info]"):
+    with st.expander(":red[App Info]"):
    
         st.info("""
 The authors of the **_RBFsim_** are not liable for any error that may result from the application of this software. 
@@ -98,7 +98,7 @@ Following authors are credited for this version [![DOI](https://zenodo.org/badge
 
 **References**
 
-- Coming up
+- <p>Yadav, P.K., Batheja, V., Köhler, A., Cantarella, V., Tufail, M., Werth, C., Grischek, T., 2024. <em>RBFsim – A tool for early planning stage of riverbank filtration systems</em>. Sustainable Water Resources Management, 10, 167. <a href="https://doi.org/10.1007/s40899-024-01137-9" target="_blank">https://doi.org/10.1007/s40899-024-01137-9</a>.</p>
 
      """,icon="ℹ️")
 
